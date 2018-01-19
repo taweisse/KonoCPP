@@ -4,5 +4,9 @@ class BoardView
 public:
     BoardView();
     ~BoardView();
+
+    void DisplayBoard() {
+
+    }
 };
 
