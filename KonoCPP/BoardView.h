@@ -12,5 +12,9 @@ public:
     ~BoardView();
 
     void Draw(Board board);
+
+    void DrawValues(Board board);
+
+    void DrawOwner(Board board);
 };
 

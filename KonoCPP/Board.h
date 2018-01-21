@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -11,9 +12,9 @@ public:
 
     // Holds information about each board location.
     struct Cell {
-        char owner;
+        char owner = 'O';
         char occupant = 'O';
-        int value;
+        int value = 0;
     };
 
     inline vector<vector<Cell>> GetBoardArray() {

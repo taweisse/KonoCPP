@@ -34,6 +34,17 @@ Board::Board(int size)
                 if (loc == "edge" || j == 0 || j == boardSize - 1) {
                     boardArray[i][j].occupant = color;
                     boardArray[i][j].owner = color;
+
+                    // Fill in the board's point values at each home location.
+                    if (loc == "mid" || j == 1 || j == boardSize - 2) {
+                        boardArray[i][j].value = 1;
+                    }
+                    else if (j == 0 || j == boardSize - 1) {
+                        boardArray[i][j].value = 3;
+                    }
+                    else {
+                        boardArray[i][j].value = ((min(j, boardSize - 1 - j) + 1) * 2) - 1;
+                    }
                 }
             }
         }
