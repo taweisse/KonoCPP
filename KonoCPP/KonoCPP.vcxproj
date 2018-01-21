@@ -111,9 +111,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Board.h" />
     <ClInclude Include="BoardView.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Board.cpp" />
     <ClCompile Include="BoardView.cpp" />
     <ClCompile Include="Kono.cpp" />
   </ItemGroup>
