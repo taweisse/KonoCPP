@@ -5,7 +5,7 @@ using namespace std;
 
 int main()
 {
-    Board testBoard(5);
+    Board testBoard(9);
     BoardView testView;
     testView.Draw(testBoard);
     system("pause");

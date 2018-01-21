@@ -15,21 +15,21 @@ void BoardView::Draw(Board boardObj)
     vector<vector<Board::Cell>> board = boardObj.GetBoardArray();
 
     cout << 'N';
-    for (int x = 0; x < boardSize; x++) {
-        cout << "\n" << x + 1 << "   ";
-        for (int y = 0; y < boardSize; y++) {
-            switch (board[x][y].occupant) {
+    for (int i = 0; i < boardSize; i++) {
+        cout << "\n" << i + 1 << "   ";
+        for (int j = 0; j < boardSize; j++) {
+            switch (board[i][j].occupant) {
             case 'w':
             case 'b':
             case 'W':
             case 'B':
-                cout << board[x][y].occupant;
+                cout << board[i][j].occupant;
                 break;
             default:
                 cout << '+';
             }
             
-            if (y < boardSize - 1) {
+            if (j < boardSize - 1) {
                 cout << " - ";
             }
             else {
@@ -37,7 +37,7 @@ void BoardView::Draw(Board boardObj)
             }
         }
 
-        if (x < boardSize - 1) {
+        if (i < boardSize - 1) {
             cout << "  ";
             for (int i = 0; i < boardSize; i++) {
                 cout << "  | ";
