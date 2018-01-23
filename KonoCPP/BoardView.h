@@ -17,4 +17,3 @@ public:
 
     void DrawOwner(Board board);
 };
-

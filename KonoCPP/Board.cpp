@@ -5,12 +5,12 @@ Board::Board(int size)
     if (size != 5 && size != 7 && size != 9) {
         throw invalid_argument("Board size invalid.");
     }
-    boardSize = size;
+    m_boardSize = size;
 
     // Grow the board vectors to the correct size.
-    boardArray.resize(boardSize);
-    for (int i = 0; i < boardSize; i++) {
-        boardArray[i].resize(boardSize);
+    m_boardArray.resize(m_boardSize);
+    for (int i = 0; i < m_boardSize; i++) {
+        m_boardArray[i].resize(m_boardSize);
 
         // Set the color that we will use for this row, and its location.
         char color = 'O';
@@ -21,29 +21,29 @@ Board::Board(int size)
                 loc = "edge";
             }
         }
-        else if (i >= boardSize - 2) {
+        else if (i >= m_boardSize - 2) {
             color = 'b';
-            if (i == boardSize - 1) {
+            if (i == m_boardSize - 1) {
                 loc = "edge";
             }
         }
 
         // Loop through each row to assign the array.
         if (color != 'O') {
-            for (int j = 0; j < boardSize; j++) {
-                if (loc == "edge" || j == 0 || j == boardSize - 1) {
-                    boardArray[i][j].occupant = color;
-                    boardArray[i][j].owner = color;
+            for (int j = 0; j < m_boardSize; j++) {
+                if (loc == "edge" || j == 0 || j == m_boardSize - 1) {
+                    m_boardArray[i][j].occupant = color;
+                    m_boardArray[i][j].owner = color;
 
                     // Fill in the board's point values at each home location.
-                    if (loc == "mid" || j == 1 || j == boardSize - 2) {
-                        boardArray[i][j].value = 1;
+                    if (loc == "mid" || j == 1 || j == m_boardSize - 2) {
+                        m_boardArray[i][j].value = 1;
                     }
-                    else if (j == 0 || j == boardSize - 1) {
-                        boardArray[i][j].value = 3;
+                    else if (j == 0 || j == m_boardSize - 1) {
+                        m_boardArray[i][j].value = 3;
                     }
                     else {
-                        boardArray[i][j].value = ((min(j, boardSize - 1 - j) + 1) * 2) - 1;
+                        m_boardArray[i][j].value = ((min(j, m_boardSize - 1 - j) + 1) * 2) - 1;
                     }
                 }
             }
@@ -53,4 +53,9 @@ Board::Board(int size)
 
 Board::~Board()
 {
+}
+
+int Board::Move(char color, int xPos, int yPos, string dir)
+{
+    return 0;
 }

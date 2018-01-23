@@ -18,15 +18,16 @@ public:
     };
 
     inline vector<vector<Cell>> GetBoardArray() {
-        return boardArray;
+        return m_boardArray;
     }
 
     inline int GetSize() {
-        return boardSize;
+        return m_boardSize;
     }
 
-private:
-    vector<vector<Cell>> boardArray;
-    int boardSize;
-};
+    int Move(char color, int xPos, int yPos, string dir);
 
+private:
+    vector<vector<Cell>> m_boardArray;
+    int m_boardSize;
+};
