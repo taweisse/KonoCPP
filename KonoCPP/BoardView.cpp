@@ -8,7 +8,7 @@ BoardView::~BoardView()
 {
 }
 
-void BoardView::Draw(Board boardObj)
+void BoardView::Draw(Board boardObj) const
 {
     int boardSize = boardObj.GetSize();
     vector<vector<Board::Cell>> board = boardObj.GetBoardArray();
@@ -56,7 +56,7 @@ void BoardView::Draw(Board boardObj)
 
 
 
-void BoardView::DrawValues(Board boardObj) 
+void BoardView::DrawValues(Board boardObj) const
 {
     int boardSize = boardObj.GetSize();
     vector<vector<Board::Cell>> board = boardObj.GetBoardArray();
@@ -93,7 +93,7 @@ void BoardView::DrawValues(Board boardObj)
     cout << " E\n";
 }
 
-void BoardView::DrawOwner(Board boardObj)
+void BoardView::DrawOwner(Board boardObj) const
 {
     int boardSize = boardObj.GetSize();
     vector<vector<Board::Cell>> board = boardObj.GetBoardArray();

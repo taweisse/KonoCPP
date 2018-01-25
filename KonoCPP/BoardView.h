@@ -11,9 +11,9 @@ public:
     BoardView();
     ~BoardView();
 
-    void Draw(Board board);
+    void Draw(Board board) const;
 
-    void DrawValues(Board board);
+    void DrawValues(Board board) const;
 
-    void DrawOwner(Board board);
+    void DrawOwner(Board board) const;
 };
