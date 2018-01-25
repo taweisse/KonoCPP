@@ -1,11 +1,8 @@
 #include "Player.h"
 
-Player::Player(char color)
+Player::Player()
 {
-    if (color != 'B' && color != 'W') {
-        throw invalid_argument("Player color invalid.");
-    }
-    m_color = color;
+    m_points = 0;
 }
 
 Player::~Player()

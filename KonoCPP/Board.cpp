@@ -64,21 +64,20 @@ Board::~Board()
 int Board::Move(Player& player, const int& vertPos, const int& horPos, const string& dir)
 {
     // Make sure the player is moving his own piece.
-    char playerColor = player.GetColor();
-    Cell& moveCell = m_boardArray[vertPos][horPos];
-
-    // Opponent's color is opposite the player who is moving.
-    char oppColor;
-    switch (playerColor) {
-    case 'W':
+    char playerColor, oppColor;
+    if (addressof(player) == addressof(m_whitePlayer)) {
+        playerColor = 'W';
         oppColor = 'B';
-        break;
-    case 'B':
+    }
+    else if (addressof(player) == addressof(m_blackPlayer)) {
+        playerColor = 'B';
         oppColor = 'W';
-        break;
+    }
+    else {
+        throw invalid_argument("The player passed to the function is not playing on this board.");
     }
 
-    // Make sure the player is moving his piece.
+    Cell& moveCell = m_boardArray[vertPos][horPos];
     if (toupper(moveCell.occupant) == oppColor) {
         cout << "You cannot move another player's piece. \n";
         return -1;
@@ -138,4 +137,5 @@ int Board::Move(Player& player, const int& vertPos, const int& horPos, const str
     }
     targetCell = moveCell;
     moveCell.occupant = 'O';
+    return 0;
 }

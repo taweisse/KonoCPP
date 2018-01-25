@@ -5,12 +5,8 @@ using namespace std;
 class Player
 {
 public:
-    Player(char color);
+    Player();
     ~Player();
-
-    inline const char GetColor() const {
-        return m_color;
-    }
 
     // Returns the number of points that the player has accumulated.
     inline const int GetPoints() const {
@@ -22,7 +18,6 @@ public:
         m_points += points;
     }
 
-private:
-    char m_color = 'O';
-    int m_points = 0;
+protected:
+    int m_points;
 };

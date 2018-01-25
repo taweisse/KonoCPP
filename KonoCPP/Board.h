@@ -9,7 +9,7 @@ using namespace std;
 class Board
 {
 public:
-    Board(int, Player &, Player &);
+    Board(int, Player&, Player&);
     ~Board();
 
     // Holds information about each board location.
