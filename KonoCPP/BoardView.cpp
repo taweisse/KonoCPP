@@ -17,12 +17,15 @@ void BoardView::Draw(Board boardObj) const
     for (int i = 0; i < boardSize; i++) {
         cout << "\n" << i + 1 << "   ";
         for (int j = 0; j < boardSize; j++) {
-            switch (board[i][j].occupant) {
-            case 'w':
-            case 'b':
+            switch (board[i][j].occupant.GetColor()) {
             case 'W':
             case 'B':
-                cout << board[i][j].occupant;
+                if (board[i][j].occupant.CanCapture()) {
+                    cout << (char)board[i][j].occupant.GetColor();
+                }
+                else {
+                    cout << (char)tolower(board[i][j].occupant.GetColor());
+                }
                 break;
             default:
                 cout << '+';
@@ -53,8 +56,6 @@ void BoardView::Draw(Board boardObj) const
     }
     cout << " E\n";
 }
-
-
 
 void BoardView::DrawValues(Board boardObj) const
 {

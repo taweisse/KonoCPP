@@ -3,19 +3,19 @@
 #include <algorithm>
 #include <iostream>
 #include <cctype>
-#include "Player.h"
+#include "Piece.h"
 using namespace std;
 
 class Board
 {
 public:
-    Board(int, Player&, Player&);
+    Board(int);
     ~Board();
 
     // Holds information about each board location.
     struct Cell {
         char owner = 'O';
-        char occupant = 'O';
+        Piece occupant = Piece();
         int value = 0;
     };
 
@@ -27,13 +27,9 @@ public:
         return m_boardSize;
     }
 
-    int Move(Player&, const int&, const int&, const string&);
+    int Move(const int&, const int&, const char[]);
 
 private:
     vector<vector<Cell>> m_boardArray;
     int m_boardSize;
-
-    // References to the player objects playing on this board.
-    Player& m_whitePlayer;
-    Player& m_blackPlayer;
 };

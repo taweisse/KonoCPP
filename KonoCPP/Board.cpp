@@ -1,8 +1,7 @@
 #include "Board.h"
 
 // Constructor. Set up the board for a new game.
-Board::Board(int size, Player &white, Player &black) 
-    : m_whitePlayer(white), m_blackPlayer(black)
+Board::Board(int size) 
 {
     // Sanity Check.
     if (size != 5 && size != 7 && size != 9) {
@@ -19,13 +18,13 @@ Board::Board(int size, Player &white, Player &black)
         char color = 'O';
         string loc = "mid";
         if (i <= 1) {
-            color = 'w';
+            color = 'W';
             if (i == 0) {
                 loc = "edge";
             }
         }
         else if (i >= m_boardSize - 2) {
-            color = 'b';
+            color = 'B';
             if (i == m_boardSize - 1) {
                 loc = "edge";
             }
@@ -37,8 +36,8 @@ Board::Board(int size, Player &white, Player &black)
         }
         for (int j = 0; j < m_boardSize; j++) {
             if (loc == "edge" || j == 0 || j == m_boardSize - 1) {
-                m_boardArray[i][j].occupant = color;
-                m_boardArray[i][j].owner = toupper(color);
+                m_boardArray[i][j].occupant = Piece(color);
+                m_boardArray[i][j].owner = color;
 
                 // Fill in the board's point values at each home location.
                 if (loc == "mid" || j == 1 || j == m_boardSize - 2) {
@@ -59,34 +58,10 @@ Board::~Board()
 {
 }
 
-// Moves a player's piece on the board. Returns -1 if the move was unsuccessful. This function
-// takes 0 - indexed coordinates.
-int Board::Move(Player& player, const int& vertPos, const int& horPos, const string& dir)
+// Moves a player's piece on the board. Returns -1 if the move was unsuccessful. Returns the number
+// of points gained or lost from this move. This function accepts 1 - indexed coordinates.
+int Board::Move(const int& vertPos, const int& horPos, const char dir[])
 {
-    // Make sure the player is moving his own piece.
-    char playerColor, oppColor;
-    if (addressof(player) == addressof(m_whitePlayer)) {
-        playerColor = 'W';
-        oppColor = 'B';
-    }
-    else if (addressof(player) == addressof(m_blackPlayer)) {
-        playerColor = 'B';
-        oppColor = 'W';
-    }
-    else {
-        throw invalid_argument("The player passed to the function is not playing on this board.");
-    }
-
-    Cell& moveCell = m_boardArray[vertPos][horPos];
-    if (toupper(moveCell.occupant) == oppColor) {
-        cout << "You cannot move another player's piece. \n";
-        return -1;
-    }
-    else if (moveCell.occupant == 'O') {
-        cout << "There is no piece at the given location. \n";
-        return -1;
-    }
-    
     // Determine where the player wants to move.
     int targetVertPos, targetHorPos;
     if (dir == "NW") {
@@ -116,26 +91,31 @@ int Board::Move(Player& player, const int& vertPos, const int& horPos, const str
         return -1;
     }
 
+    // Get the two cells involved with this move.
+    Cell& moveCell = m_boardArray[vertPos - 1][horPos - 1];
+    Cell& targetCell = m_boardArray[targetVertPos - 1][targetHorPos - 1];
+
     // Validate that the player can move to the desired location. It must be empty, or the piece 
     // must have the ability to capture.
-    Cell& targetCell = m_boardArray[targetVertPos][targetHorPos];
-    if (toupper(targetCell.occupant) == playerColor) {
+    if (moveCell.occupant.GetColor() == targetCell.occupant.GetColor()) {
         cout << "You cannot capture your own piece. \n";
         return -1;
     }
-    else if (toupper(targetCell.occupant) == oppColor && islower(moveCell.occupant)) {
+    else if (!targetCell.occupant.IsEmpty() && !moveCell.occupant.CanCapture()) {
         cout << "This piece does not have the abililty to capture. \n";
         return -1;
     }
 
     // We are allowed to execute the move if we have made it this far.
-    if (targetCell.owner == oppColor || moveCell.owner == oppColor) {
-        player.AddPoints(targetCell.value - moveCell.value);
+    int points = 0;
+    if (moveCell.occupant.GetColor() != targetCell.owner || moveCell.occupant.GetColor() != moveCell.owner) {
+        points += (targetCell.value - moveCell.value);
     }
-    if (toupper(targetCell.occupant) == oppColor) {
-        player.AddPoints(5);
+    if (!targetCell.occupant.IsEmpty() && targetCell.occupant.GetColor() != moveCell.occupant.GetColor()) {
+        points += 5;
     }
     targetCell = moveCell;
     moveCell.occupant = 'O';
+
     return 0;
 }
