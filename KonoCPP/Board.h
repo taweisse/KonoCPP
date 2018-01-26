@@ -27,7 +27,16 @@ public:
         return m_boardSize;
     }
 
-    int Move(Player&, const int&, const int&, const string&);
+    inline const char GetColor(Player player) const {
+        if (addressof(player) == addressof(m_whitePlayer)) {
+            return 'W';
+        }
+        else {
+            return 'B';
+        }
+    }
+
+    void Move(Player&, const int&, const int&, const string&);
 
 private:
     vector<vector<Cell>> m_boardArray;

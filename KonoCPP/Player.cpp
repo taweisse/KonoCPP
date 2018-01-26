@@ -8,3 +8,8 @@ Player::Player()
 Player::~Player()
 {
 }
+
+void Player::Play(Board& board)
+{
+    cout << "This function does nothing. In the future it will be the computer player's brain.";
+}

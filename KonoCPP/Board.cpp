@@ -61,7 +61,7 @@ Board::~Board()
 
 // Moves a player's piece on the board. Returns -1 if the move was unsuccessful. This function
 // takes 0 - indexed coordinates.
-int Board::Move(Player& player, const int& vertPos, const int& horPos, const string& dir)
+void Board::Move(Player& player, const int& vertPos, const int& horPos, const string& dir)
 {
     // Make sure the player is moving his own piece.
     char playerColor, oppColor;
@@ -79,12 +79,10 @@ int Board::Move(Player& player, const int& vertPos, const int& horPos, const str
 
     Cell& moveCell = m_boardArray[vertPos][horPos];
     if (toupper(moveCell.occupant) == oppColor) {
-        cout << "You cannot move another player's piece. \n";
-        return -1;
+        throw invalid_argument("You cannot move another player's piece.");
     }
     else if (moveCell.occupant == 'O') {
-        cout << "There is no piece at the given location. \n";
-        return -1;
+        throw invalid_argument("There is no piece at the given location.");
     }
     
     // Determine where the player wants to move.
@@ -107,13 +105,12 @@ int Board::Move(Player& player, const int& vertPos, const int& horPos, const str
     }
     else {
         throw invalid_argument("Invalid move direction.");
-        return -1;
     }
 
     // Validate the user's move direction. It must stay within bounds.
     if (targetVertPos >= m_boardSize || targetVertPos < 0 || targetHorPos >= m_boardSize || targetHorPos < 0) {
         cout << "Invalid move direction. A move must remain within the board's bounds. \n";
-        return -1;
+        return;
     }
 
     // Validate that the player can move to the desired location. It must be empty, or the piece 
@@ -121,11 +118,11 @@ int Board::Move(Player& player, const int& vertPos, const int& horPos, const str
     Cell& targetCell = m_boardArray[targetVertPos][targetHorPos];
     if (toupper(targetCell.occupant) == playerColor) {
         cout << "You cannot capture your own piece. \n";
-        return -1;
+        return;
     }
     else if (toupper(targetCell.occupant) == oppColor && islower(moveCell.occupant)) {
         cout << "This piece does not have the abililty to capture. \n";
-        return -1;
+        return;
     }
 
     // We are allowed to execute the move if we have made it this far.
@@ -137,5 +134,4 @@ int Board::Move(Player& player, const int& vertPos, const int& horPos, const str
     }
     targetCell = moveCell;
     moveCell.occupant = 'O';
-    return 0;
 }

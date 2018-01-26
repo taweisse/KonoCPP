@@ -1,5 +1,6 @@
 #pragma once
 #include <stdexcept>
+#include "Board.h"
 using namespace std;
 
 class Player
@@ -17,6 +18,9 @@ public:
     inline void AddPoints(int points) {
         m_points += points;
     }
+
+    // Allows the player to make a move.
+    virtual void Play(Board&);
 
 protected:
     int m_points;
