@@ -27,7 +27,7 @@ public:
         return m_boardSize;
     }
 
-    int Move(const int&, const int&, const char[]);
+    bool Move(const int&, const int&, const char[3], int&);
 
 private:
     vector<vector<Cell>> m_boardArray;

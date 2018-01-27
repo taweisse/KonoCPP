@@ -29,7 +29,6 @@ public:
         return m_canCapture;
     }
 
-    int i = 0;
     inline const bool IsEmpty() const {
         return (m_color == 'O' ? true : false);
     }
