@@ -2,6 +2,8 @@
 
 #include <vector>
 #include <iostream>
+#include <conio.h>
+#include <Windows.h>
 #include "Board.h"
 using namespace std;
 

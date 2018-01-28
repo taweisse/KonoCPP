@@ -4,7 +4,6 @@
 using namespace std;
 bool ReadDigit(int&);
 bool ReadDirection(char[3]);
-//inline void ClearInput();
 
 class Human : public Player
 {

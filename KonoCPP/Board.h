@@ -9,6 +9,13 @@ using namespace std;
 class Board
 {
 public:
+    // Default constructor will create a 0 - sized board.
+    Board()
+    {
+        m_boardArray.resize(0);
+        m_boardSize = 0;
+    }
+
     Board(int);
     ~Board();
 

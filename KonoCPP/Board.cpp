@@ -128,9 +128,10 @@ bool Board::Move(const int& y, const int& x, const char dir[3], int& points)
 
     // We are allowed to execute the move if we have made it this far.
     // First, calculate the points to be added to the player's score from this move.
-    if ((moveCol != targetCell.owner || moveCol != moveCell.owner) && moveCell.owner != moveCol) {
+    if ((moveCol != targetCell.owner && targetCell.owner != 'O') || (moveCol != moveCell.owner && moveCell.owner != 'O')) {
         points += (targetCell.value - moveCell.value);
     }
+
     if (!targetCell.occupant.IsEmpty() && targetCol != moveCol) {
         points += 5;
     }

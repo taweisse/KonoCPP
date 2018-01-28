@@ -12,18 +12,33 @@ void Human::Play(Board& board)
 {
     // Get coordinates of the move.
     int row, col;
-    cout << "Enter Row: \n";
-    ReadDigit(row);
-    cout << "Enter Colummn: \n";
-    ReadDigit(col);
-    
     char dir[3];
-    cout << "Enter move direction: ( NW, NE, SE, SW ) \n";
-    ReadDirection(dir);
+    while (1) {
+        cout << "Enter Row: \n";
+        if (ReadDigit(row) && row > 0 && row <= board.GetSize()) {
+            break;
+        }
+        cout << "Entry invalid. ";
+    }
+    while (1) {
+        cout << "Enter Column: \n";
+        if (ReadDigit(col) && col > 0 && col <= board.GetSize()) {
+            break;
+        }
+        cout << "Entry invalid. ";
+    }
+    // Get direction of the move.
+    while (1) {
+        cout << "Enter move direction: ( NW, NE, SE, SW ) \n";
+        if (ReadDirection(dir)) {
+            break;
+        }
+        cout << "Direction invalid. ";
+    }
 
-    cout << "Here's what your move looks like: \nRow: " << row << " Col: " << col << " " << dir << "\n";
+    cout << "\nHere's what your move looks like: \nRow: " << row << " Col: " << col << " " << dir << "\n\n";
 
-    // Move 
+    // Perform the move.
     int pts = 0;
     try {
         board.Move(row, col, dir, pts);
@@ -36,7 +51,8 @@ void Human::Play(Board& board)
 
 // Helper function to read a single digit from the console.
 // Returns true if successful.
-bool ReadDigit(int& digit) {
+bool ReadDigit(int& digit) 
+{
     string input;
     getline(cin, input);
 
@@ -56,7 +72,8 @@ bool ReadDigit(int& digit) {
 
 // Helper function to read a compass direction from the console.
 // Returns true if successful.
-bool ReadDirection(char dir[3]) {
+bool ReadDirection(char dir[3]) 
+{
     string input;
     getline(cin, input);
 
@@ -81,10 +98,3 @@ bool ReadDirection(char dir[3]) {
     strcpy_s(dir, 3, input.c_str());
     return true;
 }
-
-// Helper function. Clears the cin input buffer.
-//inline void ClearInput() {
-//    cin.clear();
-//    cin.ignore(numeric_limits<streamsize>::max());
-//    return;
-//}
