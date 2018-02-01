@@ -36,6 +36,15 @@ public:
 
     bool Move(const int&, const int&, const char[3], int&);
 
+    inline const char GetOccupantColor(const int& row, const int& col) const {
+        int r = row - 1;
+        int c = col - 1;
+        if (r >= 0 && r < m_boardSize && c >= 0 && c < m_boardSize) {
+            return m_boardArray[r][c].occupant.GetColor();
+        }
+        throw invalid_argument("Row or column out of board range.");
+    }
+
 private:
     vector<vector<Cell>> m_boardArray;
     int m_boardSize;

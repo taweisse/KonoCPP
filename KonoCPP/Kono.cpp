@@ -2,27 +2,38 @@
 #include "Board.h"
 #include "Player.h"
 #include "Human.h"
+#include "Game.h"
 #include <vector>
 using namespace std;
 
+void DisplayLogo();
+
 int main()
 {
-    Player player1;
-    Human player2;
+    system("cls");
+    DisplayLogo();
 
-    Board testBoard(5);
-    BoardView testView;
-    testView.DrawOwner(testBoard);
-    cout << "\n";
-    testView.DrawValues(testBoard);
-    cout << "\n";
+    Board board(5);
+    BoardView boardView;
+
+    Human player1('W');
+    Human player2('B');
 
     while (1) {
-        testView.Draw(testBoard);
-        player1.Play(testBoard);
-        player2.Play(testBoard);
+        boardView.Draw(board);
+        player1.Play(board);
 
-        cout << "Player1 Points: " << player1.GetPoints() << endl;
-        cout << "Player2 Points: " << player2.GetPoints() << endl;
+        boardView.Draw(board);
+        player2.Play(board);
     }   
+}
+
+void DisplayLogo() {
+    cout << endl;
+    cout << "  db   dD .d88b.  d8b   db  .d88b.  \n";
+    cout << "  88 ,8P'.8P  Y8. 888o  88 .8P  Y8. \n";
+    cout << "  88,8P  88    88 88V8o 88 88    88 \n";
+    cout << "  88`8b  88    88 88 V8o88 88    88 \n";
+    cout << "  88 `88.`8b  d8' 88  V888 `8b  d8' \n";
+    cout << "  8P   YD `Y88P'  8P   V8P  `Y88P'  \n\n";
 }

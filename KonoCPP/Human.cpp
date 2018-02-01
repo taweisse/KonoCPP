@@ -1,7 +1,14 @@
 #include "Human.h"
 
-Human::Human()
+Human::Human(char color)
 {
+    if (color == 'B' || color == 'W') {
+        m_color = color;
+    }
+    else {
+        throw invalid_argument("Color invalid.");
+    }
+    m_points = 0;
 }
 
 Human::~Human()
@@ -10,91 +17,61 @@ Human::~Human()
 
 void Human::Play(Board& board) 
 {
-    // Get coordinates of the move.
     int row, col;
     char dir[3];
+
+    // Loop while input is invalid. Break once user inputs a valid move.
     while (1) {
-        cout << "Enter Row: \n";
-        if (ReadDigit(row) && row > 0 && row <= board.GetSize()) {
-            break;
+        // Get coordinates of the move.
+        while (1) {
+            cout << "Enter Row: \n";
+            if (helpers::ReadDigit(row) && row > 0 && row <= board.GetSize()) {
+                break;
+            }
+            cout << "Entry invalid. ";
         }
-        cout << "Entry invalid. ";
-    }
-    while (1) {
-        cout << "Enter Column: \n";
-        if (ReadDigit(col) && col > 0 && col <= board.GetSize()) {
-            break;
+        while (1) {
+            cout << "Enter Column: \n";
+            if (helpers::ReadDigit(col) && col > 0 && col <= board.GetSize()) {
+                break;
+            }
+            cout << "Entry invalid. ";
         }
-        cout << "Entry invalid. ";
-    }
-    // Get direction of the move.
-    while (1) {
-        cout << "Enter move direction: ( NW, NE, SE, SW ) \n";
-        if (ReadDirection(dir)) {
-            break;
+        // Validate that the location entered is the right color. If the location given is not on
+        // the board, catch the exception and let the user know.
+        try {
+            char pieceColor = board.GetOccupantColor(row, col);
+            if (pieceColor != m_color && pieceColor != 'O') {
+                cout << "You can only move your own piece. \n";
+                continue;
+            }
+            else if (pieceColor == 'O') {
+                cout << "There is no piece in that location. \n";
+                continue;
+            }
         }
-        cout << "Direction invalid. ";
-    }
-
-    cout << "\nHere's what your move looks like: \nRow: " << row << " Col: " << col << " " << dir << "\n\n";
-
-    // Perform the move.
-    int pts = 0;
-    try {
-        board.Move(row, col, dir, pts);
-        m_points += pts;
-    }
-    catch (exception) {
-        cout << "That move was invalid. \n";
-    }
-}
-
-// Helper function to read a single digit from the console.
-// Returns true if successful.
-bool ReadDigit(int& digit) 
-{
-    string input;
-    getline(cin, input);
-
-    // Make sure the user only entered a single character.
-    if (input.length() > 1) {
-        return false;
-    }
-
-    // Make sure the user entered a digit. If they did, convert it.
-    char num = input[0];
-    if (!isdigit(num)) {
-        return false;
-    }
-    digit = atoi(&num);
-    return true;
-}
-
-// Helper function to read a compass direction from the console.
-// Returns true if successful.
-bool ReadDirection(char dir[3]) 
-{
-    string input;
-    getline(cin, input);
-
-    // Make sure the user only entered 2 characters.
-    if (input.length() != 2) {
-        return false;
-    }
-
-    // Make sure the user entered alpha characters, and convert to uppercase if they did.
-    for (int i = 0; i < 2; i++) {
-        if (!isalpha(input[i])) {
-            return false;
+        catch (invalid_argument) {
+            cout << "That location is not on the board. \n";
+            continue;
         }
-        input[i] = toupper(input[i]);
-    }
 
-    // Make sure the input is a valid direction.
-    if ((input[0] != 'N' && input[0] != 'S') || (input[1] != 'E' && input[1] != 'W')) {
-        return false;
+        // Get direction of the move.
+        while (1) {
+            cout << "Enter move direction: ( NW, NE, SE, SW ) \n";
+            if (helpers::ReadDirection(dir)) {
+                break;
+            }
+            cout << "Direction invalid. ";
+        }
+        // Perform the move. The function will return true if successful, in which case we can break
+        // from the loop and complete this player's turn.
+        int pts = 0;
+        if (!board.Move(row, col, dir, pts)) {
+            continue;
+        }
+        // If we make it here, the move was successful, so we can add the points recieved to the 
+        // player's score.
+        m_points = pts;
+        break;
     }
-
-    strcpy_s(dir, 3, input.c_str());
-    return true;
 }

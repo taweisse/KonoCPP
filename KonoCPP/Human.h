@@ -1,15 +1,19 @@
 #pragma once
-#include "Player.h"
 #include <string>
+#include "Player.h"
+#include "Helpers.h"
 using namespace std;
-bool ReadDigit(int&);
-bool ReadDirection(char[3]);
 
 class Human : public Player
 {
 public:
-    Human();
+    Human(char);
     ~Human();
 
     virtual void Play(Board&);
+
+    // Returns the name of the player.
+    virtual const string GetTypeAsString() const {
+        return "Human";
+    }
 };
