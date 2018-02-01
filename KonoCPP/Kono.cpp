@@ -21,10 +21,10 @@ int main()
 
     while (1) {
         boardView.Draw(board);
-        player1.Play(board);
+        player1.PrePlay(board);
 
         boardView.Draw(board);
-        player2.Play(board);
+        player2.PrePlay(board);
     }   
 }
 

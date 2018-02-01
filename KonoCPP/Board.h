@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cctype>
 #include "Piece.h"
+#include "Move.h"
 using namespace std;
 
 class Board
@@ -34,7 +35,7 @@ public:
         return m_boardSize;
     }
 
-    bool Move(const int&, const int&, const char[3], int&);
+    bool MakeMove(const Move&, int&);
 
     inline const char GetOccupantColor(const int& row, const int& col) const {
         int r = row - 1;

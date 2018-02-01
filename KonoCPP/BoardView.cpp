@@ -76,10 +76,14 @@ void BoardView::Draw(Board boardObj) const
 
         if (i < boardSize - 1) {
             SetConsoleTextAttribute(hstdout, normColor);
-            cout << " ";
+            cout << "    ";
             SetConsoleTextAttribute(hstdout, boardColor);
             for (int i = 0; i < boardSize; i++) {
-                cout << "   |";
+                cout << "|";
+                if (i < boardSize - 1) {
+                    cout << "   ";
+                }
+                
             }
         }
     }

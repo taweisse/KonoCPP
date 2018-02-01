@@ -2,6 +2,7 @@
 #include <string>
 #include "Player.h"
 #include "Helpers.h"
+#include "Move.h"
 using namespace std;
 
 class Human : public Player
@@ -16,4 +17,7 @@ public:
     virtual const string GetTypeAsString() const {
         return "Human";
     }
+
+    // Displays a menu to the player before they actually make a move.
+    virtual void PrePlay(Board&);
 };

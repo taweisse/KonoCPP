@@ -2,9 +2,10 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include "Move.h"
 
 namespace helpers {
     int ShowMenu(std::string, std::vector<std::string>);
     bool ReadDigit(int&);
-    bool ReadDirection(char[3]);
+    bool ReadDirection(Move::Direction&);
 }

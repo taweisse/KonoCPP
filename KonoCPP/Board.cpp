@@ -61,10 +61,10 @@ Board::~Board()
 // Moves a player's piece on the board. Returns -1 if the move was unsuccessful. Returns the number
 // of points gained or lost from this move, or -1 if the move was not successful. This function 
 // accepts 1 - indexed coordinates.
-bool Board::Move(const int& y, const int& x, const char dir[3], int& points)
+bool Board::MakeMove(const Move& move, int& points)
 {
-    int vertPos = y - 1;
-    int horPos = x - 1;
+    int vertPos = move.GetRow() - 1;
+    int horPos = move.GetCol() - 1;
     points = 0;
 
     Cell& moveCell = m_boardArray[vertPos][horPos];
@@ -82,20 +82,21 @@ bool Board::Move(const int& y, const int& x, const char dir[3], int& points)
     }
 
     // Determine where the player wants to move.
+    Move::Direction dir = move.GetDir();
     int targetVertPos, targetHorPos;
-    if (strcmp(dir, "NW") == 0) {
+    if (dir == Move::Direction::NW) {
         targetVertPos = vertPos - 1;
         targetHorPos = horPos - 1;
     }
-    else if (strcmp(dir, "NE") == 0) {
+    else if (dir == Move::Direction::NE) {
         targetVertPos = vertPos - 1;
         targetHorPos = horPos + 1;
     }
-    else if (strcmp(dir, "SE") == 0) {
+    else if (dir == Move::Direction::SE) {
         targetVertPos = vertPos + 1;
         targetHorPos = horPos + 1;
     }
-    else if (strcmp(dir, "SW") == 0) {
+    else if (dir == Move::Direction::SW) {
         targetVertPos = vertPos + 1;
         targetHorPos = horPos - 1;
     }

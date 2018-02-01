@@ -19,6 +19,9 @@ public:
         return m_points;
     }
 
+    // Displays a menu to the player before actually making a move.
+    virtual void PrePlay(Board&) { };
+
     // Allows the player to make a move.
     virtual void Play(Board&);
 

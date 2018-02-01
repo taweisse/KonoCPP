@@ -15,16 +15,36 @@ Human::~Human()
 {
 }
 
+void Human::PrePlay(Board& board)
+{
+    int choice = helpers::ShowMenu("Please select an option:", { "Save & Exit", "Make a Move", "Ask For Help", "Quit Game" });
+    if (choice == 1) {
+        cout << "Eventually we will save the game, but we're just going to quit for now...\n";
+        system("pause");
+        exit(0);
+    }
+    else if (choice == 2) {
+        Play(board);
+    }
+    else if (choice == 3) {
+        cout << "Once the AI works, we will display the suggestion here. \n";
+    }
+    else {
+        m_points -= 5;
+        cout << "You quit the game! \n";
+    }
+}
+
 void Human::Play(Board& board) 
 {
     int row, col;
-    char dir[3];
+    Move::Direction dir;
 
     // Loop while input is invalid. Break once user inputs a valid move.
     while (1) {
         // Get coordinates of the move.
         while (1) {
-            cout << "Enter Row: \n";
+            cout << "\nEnter Row: \n";
             if (helpers::ReadDigit(row) && row > 0 && row <= board.GetSize()) {
                 break;
             }
@@ -61,12 +81,13 @@ void Human::Play(Board& board)
             if (helpers::ReadDirection(dir)) {
                 break;
             }
-            cout << "Direction invalid. ";
+            cout << "Direction invalid. \n";
         }
-        // Perform the move. The function will return true if successful, in which case we can break
-        // from the loop and complete this player's turn.
+        // Build and perform the move. The function will return true if successful, in which case we 
+        // can break from the loop and complete this player's turn.
         int pts = 0;
-        if (!board.Move(row, col, dir, pts)) {
+        Move curMove(row, col, dir, Move::Action::Play, Move::ActionReason::Null);
+        if (!board.MakeMove(curMove, pts)) {
             continue;
         }
         // If we make it here, the move was successful, so we can add the points recieved to the 

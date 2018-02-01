@@ -42,7 +42,7 @@ namespace helpers {
 
     // Helper function to read a compass direction from the console.
     // Returns true if successful.
-    bool ReadDirection(char dir[3])
+    bool ReadDirection(Move::Direction& dir)
     {
         std::string input;
         std::getline(std::cin, input);
@@ -61,11 +61,22 @@ namespace helpers {
         }
 
         // Make sure the input is a valid direction.
-        if ((input[0] != 'N' && input[0] != 'S') || (input[1] != 'E' && input[1] != 'W')) {
-            return false;
+        if (input[0] == 'N' && input[1] == 'W'){
+            dir = Move::Direction::NW;
+            return true;
         }
-
-        strcpy_s(dir, 3, input.c_str());
-        return true;
+        else if (input[0] == 'N' && input[1] == 'E') {
+            dir = Move::Direction::NE;
+            return true;
+        }
+        else if (input[0] == 'S' && input[1] == 'E') {
+            dir = Move::Direction::SE;
+            return true;
+        }
+        else if (input[0] == 'S' && input[1] == 'W') {
+            dir = Move::Direction::SW;
+            return true;
+        }
+        return false;
     }
 }
