@@ -4,6 +4,7 @@
 #include "Human.h"
 #include "Game.h"
 #include <vector>
+#include "Helpers.h"
 using namespace std;
 
 void DisplayLogo();
@@ -13,19 +14,10 @@ int main()
     system("cls");
     DisplayLogo();
 
-    Board board(5);
-    BoardView boardView;
-
-    Human player1('W');
-    Human player2('B');
-
-    while (1) {
-        boardView.Draw(board);
-        player1.PrePlay(board);
-
-        boardView.Draw(board);
-        player2.PrePlay(board);
-    }   
+    Human p1(helpers::White);
+    Human p2(helpers::Black);
+    Game game(p1, p2, 5);
+    game.PlayGame();
 }
 
 void DisplayLogo() {

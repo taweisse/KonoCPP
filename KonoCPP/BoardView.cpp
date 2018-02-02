@@ -38,10 +38,10 @@ void BoardView::Draw(Board boardObj) const
         for (int j = 0; j < boardSize; j++) {
             WORD outputColor = boardColor;
             Piece occupant = board[i][j].occupant;
-            if (occupant.GetColor() == 'W') {
+            if (occupant.GetColor() == helpers::White) {
                 outputColor = wColor;
             }
-            else if (occupant.GetColor() == 'B') {
+            else if (occupant.GetColor() == helpers::Black) {
                 outputColor = bColor;
             }
 
@@ -49,9 +49,9 @@ void BoardView::Draw(Board boardObj) const
             SetConsoleTextAttribute(hstdout, outputColor);
 
             switch (board[i][j].occupant.GetColor()) {
-            case 'W':
-            case 'B':
-                cout << occupant.GetColor();
+            case helpers::White:
+            case helpers::Black:
+                cout << (char)occupant.GetColor();
                 if (occupant.CanCapture()) {
                     cout << ' ';
                 }

@@ -1,8 +1,8 @@
 #include "Human.h"
 
-Human::Human(char color)
+Human::Human(const helpers::Color color)
 {
-    if (color == 'B' || color == 'W') {
+    if (color == helpers::White || color == helpers::Black) {
         m_color = color;
     }
     else {
@@ -11,34 +11,32 @@ Human::Human(char color)
     m_points = 0;
 }
 
-Human::~Human()
+const Move Human::PrePlay(Board& board)
 {
-}
-
-void Human::PrePlay(Board& board)
-{
+    Move thisMove;
     int choice = helpers::ShowMenu("Please select an option:", { "Save & Exit", "Make a Move", "Ask For Help", "Quit Game" });
     if (choice == 1) {
-        cout << "Eventually we will save the game, but we're just going to quit for now...\n";
-        system("pause");
-        exit(0);
+        thisMove = Move(Move::Save);
     }
     else if (choice == 2) {
-        Play(board);
+        thisMove = Play(board);
     }
     else if (choice == 3) {
-        cout << "Once the AI works, we will display the suggestion here. \n";
+        thisMove = Player::Play(board);
     }
     else {
-        m_points -= 5;
-        cout << "You quit the game! \n";
+        thisMove = Move(Move::Quit);
     }
+
+    // Return the move that we just played.
+    return thisMove;
 }
 
-void Human::Play(Board& board) 
+const Move Human::Play(Board& board) 
 {
     int row, col;
     Move::Direction dir;
+    Move thisMove;
 
     // Loop while input is invalid. Break once user inputs a valid move.
     while (1) {
@@ -86,8 +84,8 @@ void Human::Play(Board& board)
         // Build and perform the move. The function will return true if successful, in which case we 
         // can break from the loop and complete this player's turn.
         int pts = 0;
-        Move curMove(row, col, dir, Move::Action::Play, Move::ActionReason::Null);
-        if (!board.MakeMove(curMove, pts)) {
+        thisMove = Move(row, col, dir, Move::Play, Move::Null);
+        if (!board.MakeMove(thisMove, pts)) {
             continue;
         }
         // If we make it here, the move was successful, so we can add the points recieved to the 
@@ -95,4 +93,5 @@ void Human::Play(Board& board)
         m_points = pts;
         break;
     }
+    return thisMove;
 }

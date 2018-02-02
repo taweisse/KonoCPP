@@ -15,23 +15,22 @@ Board::Board(int size)
         m_boardArray[i].resize(m_boardSize);
 
         // Set the color that we will use for this row, and its location.
-        char color = 'O';
+        helpers::Color color = helpers::NullColor;
         string loc = "mid";
         if (i <= 1) {
-            color = 'W';
+            color = helpers::White;
             if (i == 0) {
                 loc = "edge";
             }
         }
         else if (i >= m_boardSize - 2) {
-            color = 'B';
+            color = helpers::Black;
             if (i == m_boardSize - 1) {
                 loc = "edge";
             }
         }
-
         // Loop through each row to assign the array.
-        if (color == 'O') {
+        if (color == helpers::NullColor) {
             continue;
         }
         for (int j = 0; j < m_boardSize; j++) {
@@ -84,19 +83,19 @@ bool Board::MakeMove(const Move& move, int& points)
     // Determine where the player wants to move.
     Move::Direction dir = move.GetDir();
     int targetVertPos, targetHorPos;
-    if (dir == Move::Direction::NW) {
+    if (dir == Move::NW) {
         targetVertPos = vertPos - 1;
         targetHorPos = horPos - 1;
     }
-    else if (dir == Move::Direction::NE) {
+    else if (dir == Move::NE) {
         targetVertPos = vertPos - 1;
         targetHorPos = horPos + 1;
     }
-    else if (dir == Move::Direction::SE) {
+    else if (dir == Move::SE) {
         targetVertPos = vertPos + 1;
         targetHorPos = horPos + 1;
     }
-    else if (dir == Move::Direction::SW) {
+    else if (dir == Move::SW) {
         targetVertPos = vertPos + 1;
         targetHorPos = horPos - 1;
     }
@@ -129,7 +128,7 @@ bool Board::MakeMove(const Move& move, int& points)
 
     // We are allowed to execute the move if we have made it this far.
     // First, calculate the points to be added to the player's score from this move.
-    if ((moveCol != targetCell.owner && targetCell.owner != 'O') || (moveCol != moveCell.owner && moveCell.owner != 'O')) {
+    if ((moveCol != targetCell.owner && targetCell.owner != helpers::NullColor) || (moveCol != moveCell.owner && moveCell.owner != helpers::NullColor)) {
         points += (targetCell.value - moveCell.value);
     }
 
@@ -138,7 +137,7 @@ bool Board::MakeMove(const Move& move, int& points)
     }
 
     // Allow the piece to capture if we reach the opponent's home location.
-    if (targetCell.owner != 'O' && moveCol != targetCell.owner) {
+    if (targetCell.owner != helpers::NullColor && moveCol != targetCell.owner) {
         moveCell.occupant.AllowCapture();
     }
 
@@ -147,4 +146,39 @@ bool Board::MakeMove(const Move& move, int& points)
     moveCell.occupant = Piece();
 
     return true;
+}
+
+helpers::Color Board::GetWinner()
+{
+    bool whiteWin = true;
+    bool blackWin = true;
+
+    // Check every cell in the array. If any owner location is not occupied by the opposite color,
+    // that color didn't win.
+    for (int i = 0; i < m_boardSize; i++) {
+        for (int j = 0; j < m_boardSize; j++) {
+            helpers::Color thisOwner = m_boardArray[i][j].owner;
+            helpers::Color thisOccupant = m_boardArray[i][j].occupant.GetColor();
+            if (thisOwner != thisOccupant && thisOccupant != helpers::NullColor) {
+                if (thisOccupant == helpers::White) {
+                    whiteWin = false;
+                }
+                else {
+                    blackWin = false;
+                }
+            }
+        }
+    }
+
+    // Return whichever color has won, if either. If both occupy each other's spaces, there is also
+    // no winner. This case shouldn't happen though. The board should be checked after every move.
+    if ((whiteWin && blackWin) || (!whiteWin && !blackWin)) {
+        return helpers::NullColor;
+    }
+    else if (whiteWin) {
+        return helpers::White;
+    }
+    else {
+        return helpers::Black;
+    }
 }

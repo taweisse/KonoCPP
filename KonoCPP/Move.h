@@ -5,11 +5,12 @@ using namespace std;
 class Move
 {
 public:
-    enum Action { Play, Quit };
-    enum ActionReason { Block, Advance, Capture, Escape, Null };
+    enum Action { Play, Quit, Save, Help };
+    enum ActionReason { Block, Advance, Occupy, Capture, Escape, Win, Null };
     enum Direction { NW, NE, SE, SW };
 
-    Move();
+    // Constructors. Default, an actual move, and an action - only.
+    Move(const Action& = Play);
     Move(const int&, const int&, const Direction&, const Action&, const ActionReason& = Null);
     ~Move();
 
@@ -21,7 +22,7 @@ public:
         return true;
     }
 
-    void SetMove(const int& row, const int& col, const Direction& dir, const Action& action, const ActionReason& reason = Null);
+    void SetMove(const int&, const int&, const Direction&, const Action&, const ActionReason& = Null);
     
     // Access to all of the private variables:
     inline const int GetRow() const {

@@ -5,6 +5,7 @@
 #include <conio.h>
 #include <Windows.h>
 #include "Board.h"
+#include "Helpers.h"
 using namespace std;
 
 class BoardView

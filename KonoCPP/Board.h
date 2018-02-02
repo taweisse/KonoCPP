@@ -5,6 +5,7 @@
 #include <cctype>
 #include "Piece.h"
 #include "Move.h"
+#include "Helpers.h"
 using namespace std;
 
 class Board
@@ -22,7 +23,7 @@ public:
 
     // Holds information about each board location.
     struct Cell {
-        char owner = 'O';
+        helpers::Color owner = helpers::NullColor;
         Piece occupant = Piece();
         int value = 0;
     };
@@ -45,6 +46,9 @@ public:
         }
         throw invalid_argument("Row or column out of board range.");
     }
+
+    // Determines if there is a winner for this game. Returns NullColor if not.
+    helpers::Color GetWinner();
 
 private:
     vector<vector<Cell>> m_boardArray;

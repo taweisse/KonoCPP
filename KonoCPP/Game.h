@@ -10,12 +10,15 @@ class Game
 {
 public:
     Game();
-    Game(Player, Player, int);
+    Game(Player&, Player&, int);
     ~Game();
 
+    bool PlayGame();
+
 private:
-    Player m_player1;
-    Player m_player2;
+    Player* m_players[2];
     Board m_gameboard;
     BoardView m_renderer;
+
+    void PrintMove(const Move&);
 };

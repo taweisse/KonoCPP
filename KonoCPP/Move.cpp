@@ -1,12 +1,11 @@
 #include "Move.h"
 
-Move::Move()
+Move::Move(const Action& action)
 {
     // Constructor assigns negative to row and column to test if this move is valid.
     m_row = -1;
     m_col = -1;
     m_dir = NW;
-    m_action = Play;
     m_reason = Null;
 }
 
@@ -17,6 +16,7 @@ Move::Move(const int& row, const int& col, const Direction& dir, const Action& a
 
 Move::~Move()
 {
+
 }
 
 void Move::SetMove(const int& row, const int& col, const Direction& dir, const Action& action, const ActionReason& reason)

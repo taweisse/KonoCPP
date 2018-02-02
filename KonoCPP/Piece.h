@@ -1,27 +1,28 @@
 #pragma once
 #include <stdexcept>
+#include "Helpers.h"
 
 class Piece
 {
 public:
     Piece() {
-        m_color = 'O';
+        m_color = helpers::NullColor;
         m_canCapture = false;
     }
 
-    Piece(char color) {
-        if (color == 'B' || color == 'W') {
+    Piece(helpers::Color color) {
+        if (color == helpers::White || color == helpers::Black) {
             m_color = color;
-            m_canCapture = false;
         }
         else {
-            //throw invalid_argument("Invalid color.");
+            m_color = helpers::NullColor;
         }
+        m_canCapture = false;
     }
 
     ~Piece();
 
-    inline const char GetColor() const {
+    inline const helpers::Color GetColor() const {
         return m_color;
     }
 
@@ -30,7 +31,7 @@ public:
     }
 
     inline const bool IsEmpty() const {
-        return (m_color == 'O' ? true : false);
+        return (m_color == helpers::NullColor ? true : false);
     }
 
     // Upgrade the piece to allow it to capture opponents.
@@ -39,7 +40,7 @@ public:
     }
 
 private:
-    char m_color;
+    helpers::Color m_color;
     bool m_canCapture;
 };
 
