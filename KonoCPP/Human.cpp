@@ -26,6 +26,7 @@ const Move Human::PrePlay(Board& board)
     }
     else {
         thisMove = Move(Move::Quit);
+        m_points -= 5;
     }
 
     // Return the move that we just played.
@@ -90,7 +91,7 @@ const Move Human::Play(Board& board)
         }
         // If we make it here, the move was successful, so we can add the points recieved to the 
         // player's score.
-        m_points = pts;
+        m_points += pts;
         break;
     }
     return thisMove;

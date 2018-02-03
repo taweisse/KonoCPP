@@ -15,8 +15,4 @@ public:
     ~BoardView();
 
     void Draw(Board board) const;
-
-    void DrawValues(Board board) const;
-
-    void DrawOwner(Board board) const;
 };

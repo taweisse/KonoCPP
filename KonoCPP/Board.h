@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <iostream>
 #include <cctype>
+#include <string>
 #include "Piece.h"
 #include "Move.h"
 #include "Helpers.h"
@@ -19,6 +20,10 @@ public:
     }
 
     Board(int);
+
+    // Constructs a board object based on a vector of serialization data.
+    Board(vector<string>);
+
     ~Board();
 
     // Holds information about each board location.
@@ -38,14 +43,7 @@ public:
 
     bool MakeMove(const Move&, int&);
 
-    inline const char GetOccupantColor(const int& row, const int& col) const {
-        int r = row - 1;
-        int c = col - 1;
-        if (r >= 0 && r < m_boardSize && c >= 0 && c < m_boardSize) {
-            return m_boardArray[r][c].occupant.GetColor();
-        }
-        throw invalid_argument("Row or column out of board range.");
-    }
+    const char GetOccupantColor(const int& row, const int& col) const;
 
     // Determines if there is a winner for this game. Returns NullColor if not.
     helpers::Color GetWinner();
@@ -53,4 +51,7 @@ public:
 private:
     vector<vector<Cell>> m_boardArray;
     int m_boardSize;
+    
+    // Initializes the board with default values depending on the size.
+    void InitializeBoard(int);
 };

@@ -24,19 +24,18 @@ public:
         return m_roundNum;
     }
 
-    const int GetPlayer1Score() const {
-        return m_player1Score;
-    }
-
-    const int GetPlayer2Score() const {
-        return m_player2Score;
-    }
+    // Starts a new tournament.
+    bool PlayTournament();
 
 private:
     Game m_currentGame;
     Player m_player1;
     Player m_player2;
     int m_roundNum;
-    int m_player1Score;
-    int m_player2Score;
+
+    // If this string is not empty, the code that handles throwing dice will read from the filename
+    // instead of randomly choosing numbers.
+    string m_diceFile = "";
+
+    int ThrowDice();
 };

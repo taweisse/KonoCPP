@@ -6,6 +6,7 @@ Move::Move(const Action& action)
     m_row = -1;
     m_col = -1;
     m_dir = NW;
+    m_action = action;
     m_reason = Null;
 }
 

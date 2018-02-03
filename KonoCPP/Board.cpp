@@ -3,52 +3,63 @@
 // Constructor. Set up the board for a new game.
 Board::Board(int size) 
 {
-    // Sanity Check.
-    if (size != 5 && size != 7 && size != 9) {
-        throw invalid_argument("Board size invalid.");
+    // The setup is kept in a seperate function because we need it in other constructors as well.
+    InitializeBoard(size);
+}
+
+Board::Board(vector<string> data) {
+    int numCells = data.size();
+    if (numCells == 25 || numCells == 49 || numCells == 81) {
+        // Load a default board. We will move the occupant locations to where they need to be.
+        // We want to keep the home locations and point values, though.
+        InitializeBoard((int)sqrt(numCells));
     }
-    m_boardSize = size;
+    else {
+        throw invalid_argument("Bad data. Not a valid number of cells.");
+    }
 
-    // Grow the board vectors to the correct size.
-    m_boardArray.resize(m_boardSize);
-    for (int i = 0; i < m_boardSize; i++) {
-        m_boardArray[i].resize(m_boardSize);
+    // Iterate through every cell passed to us. Map that cell to its cooresponding (row, col)
+    // position, and update the occupant at that cell.
+    int row, col;
+    helpers::Color curColor;
+    bool canCapture;
+    for (int i = 0; i < numCells; i++) {
+        // Map the 1D data vector to our 2D board grid.
+        row = (int)i / m_boardSize;
+        col = i % m_boardSize;
 
-        // Set the color that we will use for this row, and its location.
-        helpers::Color color = helpers::NullColor;
-        string loc = "mid";
-        if (i <= 1) {
-            color = helpers::White;
-            if (i == 0) {
-                loc = "edge";
-            }
+        // Set this cell's color based on the data.
+        switch (data[i][0]) {
+        case 'O':
+            curColor = helpers::NullColor;
+            break;
+        case 'W':
+            curColor = helpers::White;
+            break;
+        case 'B':
+            curColor = helpers::Black;
+            break;
+        default:
+            throw invalid_argument("Bad data. Color of cell not recognized.");
         }
-        else if (i >= m_boardSize - 2) {
-            color = helpers::Black;
-            if (i == m_boardSize - 1) {
-                loc = "edge";
-            }
-        }
-        // Loop through each row to assign the array.
-        if (color == helpers::NullColor) {
-            continue;
-        }
-        for (int j = 0; j < m_boardSize; j++) {
-            if (loc == "edge" || j == 0 || j == m_boardSize - 1) {
-                m_boardArray[i][j].occupant = Piece(color);
-                m_boardArray[i][j].owner = color;
 
-                // Fill in the board's point values at each home location.
-                if (loc == "mid" || j == 1 || j == m_boardSize - 2) {
-                    m_boardArray[i][j].value = 1;
-                }
-                else if (j == 0 || j == m_boardSize - 1) {
-                    m_boardArray[i][j].value = 3;
-                }
-                else {
-                    m_boardArray[i][j].value = ((min(j, m_boardSize - 1 - j) + 1) * 2) - 1;
-                }
-            }
+        // Set this cell's ability to capture based on the data. A double character represents 
+        // capture ability in the serialized file.
+        switch (data[i].length()) {
+        case 1:
+            canCapture = false;
+            break;
+        case 2:
+            canCapture = true;
+            break;
+        default:
+            throw invalid_argument("Bad data. Cells can be represented by up to 2 characters.");
+        }
+
+        // Reassign the occupant based on the attributes we just extracted from the data.
+        m_boardArray[row][col].occupant = Piece(curColor);
+        if (canCapture && curColor != helpers::NullColor) {
+            m_boardArray[row][col].occupant.AllowCapture();
         }
     }
 }
@@ -148,6 +159,16 @@ bool Board::MakeMove(const Move& move, int& points)
     return true;
 }
 
+const char Board::GetOccupantColor(const int& row, const int& col) const
+{
+    int r = row - 1;
+    int c = col - 1;
+    if (r >= 0 && r < m_boardSize && c >= 0 && c < m_boardSize) {
+        return m_boardArray[r][c].occupant.GetColor();
+    }
+    throw invalid_argument("Row or column out of board range.");
+}
+
 helpers::Color Board::GetWinner()
 {
     bool whiteWin = true;
@@ -159,7 +180,7 @@ helpers::Color Board::GetWinner()
         for (int j = 0; j < m_boardSize; j++) {
             helpers::Color thisOwner = m_boardArray[i][j].owner;
             helpers::Color thisOccupant = m_boardArray[i][j].occupant.GetColor();
-            if (thisOwner != thisOccupant && thisOccupant != helpers::NullColor) {
+            if (thisOwner == thisOccupant && thisOccupant != helpers::NullColor) {
                 if (thisOccupant == helpers::White) {
                     whiteWin = false;
                 }
@@ -180,5 +201,57 @@ helpers::Color Board::GetWinner()
     }
     else {
         return helpers::Black;
+    }
+}
+
+void Board::InitializeBoard(int size)
+{
+    // Validate the size of the board.
+    if (size != 5 && size != 7 && size != 9) {
+        throw invalid_argument("Board size invalid.");
+    }
+    m_boardSize = size;
+
+    // Grow the board vectors to the correct size.
+    m_boardArray.resize(m_boardSize);
+    for (int i = 0; i < m_boardSize; i++) {
+        m_boardArray[i].resize(m_boardSize);
+
+        // Set the color that we will use for this row, and its location.
+        helpers::Color color = helpers::NullColor;
+        string loc = "mid";
+        if (i <= 1) {
+            color = helpers::White;
+            if (i == 0) {
+                loc = "edge";
+            }
+        }
+        else if (i >= m_boardSize - 2) {
+            color = helpers::Black;
+            if (i == m_boardSize - 1) {
+                loc = "edge";
+            }
+        }
+        // Loop through each row to assign the array.
+        if (color == helpers::NullColor) {
+            continue;
+        }
+        for (int j = 0; j < m_boardSize; j++) {
+            if (loc == "edge" || j == 0 || j == m_boardSize - 1) {
+                m_boardArray[i][j].occupant = Piece(color);
+                m_boardArray[i][j].owner = color;
+
+                // Fill in the board's point values at each home location.
+                if (loc == "mid" || j == 1 || j == m_boardSize - 2) {
+                    m_boardArray[i][j].value = 1;
+                }
+                else if (j == 0 || j == m_boardSize - 1) {
+                    m_boardArray[i][j].value = 3;
+                }
+                else {
+                    m_boardArray[i][j].value = ((min(j, m_boardSize - 1 - j) + 1) * 2) - 1;
+                }
+            }
+        }
     }
 }

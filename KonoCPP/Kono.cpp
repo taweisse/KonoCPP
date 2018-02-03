@@ -11,13 +11,20 @@ void DisplayLogo();
 
 int main()
 {
+    vector<string> testData = { "O", "W", "W", "W", "B", "O", "O", "WW", "WW", "B", "BB", "O", "O", "O", "O", "WW", "O", "W", "B", "WW", "O", "O", "O", "O", "O" };
+    Board t1(testData);
+    BoardView testView;
+    testView.Draw(t1);
+    system("pause");
+
     system("cls");
     DisplayLogo();
 
     Human p1(helpers::White);
     Human p2(helpers::Black);
-    Game game(p1, p2, 5);
+    Game game(p1, p2, 2);
     game.PlayGame();
+    system("pause");
 }
 
 void DisplayLogo() {

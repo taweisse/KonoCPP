@@ -36,40 +36,46 @@ void BoardView::Draw(Board boardObj) const
         SetConsoleTextAttribute(hstdout, normColor);
         cout << "\n" << i + 1 << "   ";
         for (int j = 0; j < boardSize; j++) {
-            WORD outputColor = boardColor;
             Piece occupant = board[i][j].occupant;
+
+            // Switch to board colors.
+            SetConsoleTextAttribute(hstdout, boardColor);
+
+            // Draw dashes in between each cell.
+            if (j > 0) {
+                cout << " -";
+                if (!occupant.CanCapture()) {
+                    cout << ' ';
+                }
+            }
+
+            // Find the correct output color to use.
+            WORD outputColor = boardColor;
             if (occupant.GetColor() == helpers::White) {
                 outputColor = wColor;
             }
             else if (occupant.GetColor() == helpers::Black) {
                 outputColor = bColor;
             }
-
+            
             // Set board output colors depending on the piece.
             SetConsoleTextAttribute(hstdout, outputColor);
 
             switch (board[i][j].occupant.GetColor()) {
             case helpers::White:
             case helpers::Black:
+                if (occupant.CanCapture() && j == boardSize - 1) {
+                    cout << ' ';
+                }
                 cout << (char)occupant.GetColor();
-                if (occupant.CanCapture()) {
+                if (occupant.CanCapture() && j < boardSize - 1) {
                     cout << ' ';
                 }
                 break;
             default:
                 cout << "+";
             }
-
-            // Reset colors back to after the piece is drawn.
-            SetConsoleTextAttribute(hstdout, boardColor);
-            
-            if (j < boardSize - 1) {
-                if (!occupant.CanCapture()) {
-                    cout << ' ';
-                }
-                cout << "- ";
-            }
-            else {
+            if (j == boardSize - 1) {
                 cout << "\n";
             }
         }
@@ -82,8 +88,7 @@ void BoardView::Draw(Board boardObj) const
                 cout << "|";
                 if (i < boardSize - 1) {
                     cout << "   ";
-                }
-                
+                }   
             }
         }
     }
@@ -101,78 +106,4 @@ void BoardView::Draw(Board boardObj) const
     // Set colors back to default.
     SetConsoleTextAttribute(hstdout, csbi.wAttributes);
     SetConsoleCursorInfo(hstdout, &cursorInfo);
-}
-
-void BoardView::DrawValues(Board boardObj) const
-{
-    int boardSize = boardObj.GetSize();
-    vector<vector<Board::Cell>> board = boardObj.GetBoardArray();
-
-    cout << 'N';
-    for (int i = 0; i < boardSize; i++) {
-        cout << "\n" << i + 1 << "   ";
-        for (int j = 0; j < boardSize; j++) {
-            cout << board[i][j].value;
-
-            if (j < boardSize - 1) {
-                cout << " - ";
-            }
-            else {
-                cout << "\n";
-            }
-        }
-
-        if (i < boardSize - 1) {
-            cout << "  ";
-            for (int i = 0; i < boardSize; i++) {
-                cout << "  | ";
-            }
-        }
-    }
-
-    cout << "S\n  W ";
-    for (int y = 0; y < boardSize; y++) {
-        cout << y + 1;
-        if (y < boardSize - 1) {
-            cout << "   ";
-        }
-    }
-    cout << " E\n";
-}
-
-void BoardView::DrawOwner(Board boardObj) const
-{
-    int boardSize = boardObj.GetSize();
-    vector<vector<Board::Cell>> board = boardObj.GetBoardArray();
-
-    cout << 'N';
-    for (int i = 0; i < boardSize; i++) {
-        cout << "\n" << i + 1 << "   ";
-        for (int j = 0; j < boardSize; j++) {
-            cout << board[i][j].owner;
-
-            if (j < boardSize - 1) {
-                cout << " - ";
-            }
-            else {
-                cout << "\n";
-            }
-        }
-
-        if (i < boardSize - 1) {
-            cout << "  ";
-            for (int i = 0; i < boardSize; i++) {
-                cout << "  | ";
-            }
-        }
-    }
-
-    cout << "S\n  W ";
-    for (int y = 0; y < boardSize; y++) {
-        cout << y + 1;
-        if (y < boardSize - 1) {
-            cout << "   ";
-        }
-    }
-    cout << " E\n";
 }
