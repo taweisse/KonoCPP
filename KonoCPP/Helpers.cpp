@@ -15,7 +15,7 @@ namespace helpers {
             if (choice > 0 && choice <= (int)items.size()) {
                 return choice;
             }
-            std::cout << "Invalid. Re-enter selection.\n";
+            std::cout << "Invalid. Re-enter selection:\n";
         }
     }
 

@@ -1,7 +1,13 @@
 #include "Tournament.h"
 
-Tournament::Tournament()
+Tournament::Tournament(Player::PlayerType p1, Player::PlayerType p2, Game game, int round, int p1Score, int p2Score)
 {
+    m_currentGame = game;
+    m_roundNum = round;
+    m_p1Type = p1;
+    m_p2Type = p2;
+    m_p1Score = p1Score;
+    m_p2Score = p2Score;
 }
 
 Tournament::~Tournament()

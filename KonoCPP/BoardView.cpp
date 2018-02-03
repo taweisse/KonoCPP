@@ -10,7 +10,7 @@ BoardView::~BoardView()
 
 void BoardView::Draw(Board boardObj) const
 {
-    // Define board and player colors.
+    // Define board and player colors as constants for clarity.
     const WORD normColor  = 0x07;
     const WORD boardColor = 0x87;
     const WORD wColor     = 0xF0;
@@ -29,52 +29,72 @@ void BoardView::Draw(Board boardObj) const
     int boardSize = boardObj.GetSize();
     vector<vector<Board::Cell>> board = boardObj.GetBoardArray();
 
-    // Set the board to the normal backgrounf colors.
+    // Set the board to the normal background colors.
     SetConsoleTextAttribute(hstdout, normColor);
     cout << 'N';
     for (int i = 0; i < boardSize; i++) {
+        // Reset to normal background colors each time through the loop.
         SetConsoleTextAttribute(hstdout, normColor);
+        // Output the row number.
         cout << "\n" << i + 1 << "   ";
         for (int j = 0; j < boardSize; j++) {
+            // Get the occupant at the current cell.
             Piece occupant = board[i][j].occupant;
+            helpers::Color occColor = occupant.GetColor();
 
             // Switch to board colors.
             SetConsoleTextAttribute(hstdout, boardColor);
 
-            // Draw dashes in between each cell.
+            // Draw dashes before each cell, unless we are one the first one.
+            // We dont want a dash to the left of the board.
             if (j > 0) {
-                cout << " -";
-                if (!occupant.CanCapture()) {
-                    cout << ' ';
-                }
+                cout << "-";
             }
 
-            // Find the correct output color to use.
+            if (j != 0 && !(j == boardSize - 1 && occupant.CanCapture())) {
+                cout << " ";
+            }
+
+            // Pick the correct output color, depending on this cell's occupant color.
             WORD outputColor = boardColor;
-            if (occupant.GetColor() == helpers::White) {
+            if (occColor == helpers::White) {
                 outputColor = wColor;
             }
-            else if (occupant.GetColor() == helpers::Black) {
+            else if (occColor == helpers::Black) {
                 outputColor = bColor;
             }
-            
-            // Set board output colors depending on the piece.
             SetConsoleTextAttribute(hstdout, outputColor);
 
-            switch (board[i][j].occupant.GetColor()) {
+            // If the occupant can capture, we display its piece one character wider to distinguish
+            // it from the rest.
+            switch (occColor) {
             case helpers::White:
             case helpers::Black:
                 if (occupant.CanCapture() && j == boardSize - 1) {
                     cout << ' ';
                 }
-                cout << (char)occupant.GetColor();
+                cout << (char)occColor;
                 if (occupant.CanCapture() && j < boardSize - 1) {
                     cout << ' ';
                 }
                 break;
             default:
                 cout << "+";
+                if (j < boardSize - 1) {
+                    cout << " ";
+                }
             }
+
+            // Set the colors back to the board colors for more output.
+            SetConsoleTextAttribute(hstdout, boardColor);
+
+            // If the occupant we just output does not have the ability to capture, we need to pad 
+            // the space that it is can take up with a blank.
+            if (!occupant.CanCapture() && occColor != helpers::NullColor && j < boardSize - 1) {
+                cout << " ";
+            }
+
+            // End this line if we have output everything on it.
             if (j == boardSize - 1) {
                 cout << "\n";
             }

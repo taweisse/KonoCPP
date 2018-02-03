@@ -8,6 +8,9 @@ using namespace std;
 class Player
 {
 public:
+    // Define types of player objects.
+    enum PlayerType { player, human, computer };
+
     // We should never call this from a player object.
     Player();
     ~Player();
@@ -29,8 +32,8 @@ public:
     virtual const Move Play(Board&);
 
     // Returns the name of the player.
-    virtual const string GetTypeAsString() const {
-        return "Player";
+    virtual inline const PlayerType GetType() const {
+        return player;
     }
 
 protected:

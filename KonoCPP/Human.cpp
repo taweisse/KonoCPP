@@ -2,12 +2,7 @@
 
 Human::Human(const helpers::Color color)
 {
-    if (color == helpers::White || color == helpers::Black) {
-        m_color = color;
-    }
-    else {
-        throw invalid_argument("Color invalid.");
-    }
+    m_color = color;
     m_points = 0;
 }
 
@@ -15,18 +10,20 @@ const Move Human::PrePlay(Board& board)
 {
     Move thisMove;
     int choice = helpers::ShowMenu("Please select an option:", { "Save & Exit", "Make a Move", "Ask For Help", "Quit Game" });
-    if (choice == 1) {
+    switch (choice) {
+    case 1:
         thisMove = Move(Move::Save);
-    }
-    else if (choice == 2) {
+        break;
+    case 2:
         thisMove = Play(board);
-    }
-    else if (choice == 3) {
+        break;
+    case 3:
         thisMove = Player::Play(board);
-    }
-    else {
+        break;
+    default:
         thisMove = Move(Move::Quit);
         m_points -= 5;
+        break;
     }
 
     // Return the move that we just played.

@@ -6,11 +6,11 @@ class Computer : public Player
 {
 public:
 
-    Computer(helpers::Color);
+    Computer(helpers::Color = helpers::NullColor);
 
     // Returns the name of the player.
-    virtual const string GetTypeAsString() const {
-        return "Computer";
+    virtual inline const PlayerType GetType() const {
+        return computer;
     }
 
     // Displays a menu to the player before they actually make a move.

@@ -2,12 +2,7 @@
 
 Computer::Computer(helpers::Color color)
 {
-    if (color == helpers::White || color == helpers::Black) {
-        m_color = color;
-    }
-    else {
-        throw invalid_argument("Color invalid.");
-    }
+    m_color = color;
     m_points = 0;
 }
 

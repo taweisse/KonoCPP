@@ -15,9 +15,6 @@ int Serializer::SerializeToFile(const Tournament& tourn, const string& filename)
     // Save the current round.
     outFile << "Round: " << tourn.GetRound() << "\n\n";
 
-    // Save the each player's current score. Note player 2 comes first.
-    outFile << tourn.GetPlayer2().GetTypeAsString() << ": \n";
-
     return 0;
 }
 
