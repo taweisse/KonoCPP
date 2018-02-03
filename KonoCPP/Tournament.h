@@ -21,12 +21,14 @@ public:
     bool PlayTournament();
 
 private:
-    Player::PlayerType m_p1Type;
-    Player::PlayerType m_p2Type;
+    struct TournPlayer {
+        Player::PlayerType m_type;
+        int m_score;
+    };
+
+    TournPlayer m_players[2];
     Game m_currentGame;
     int m_roundNum;
-    int m_p1Score;
-    int m_p2Score;
     int m_firstPlayer;
 
     // If this string is not empty, the code that handles throwing dice will read from the filename

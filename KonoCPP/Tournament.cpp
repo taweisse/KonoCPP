@@ -4,10 +4,10 @@ Tournament::Tournament(Player::PlayerType p1, Player::PlayerType p2, Game game, 
 {
     m_currentGame = game;
     m_roundNum = round;
-    m_p1Type = p1;
-    m_p2Type = p2;
-    m_p1Score = p1Score;
-    m_p2Score = p2Score;
+    m_players[0].m_type = p1;
+    m_players[1].m_type = p2;
+    m_players[0].m_score = p1Score;
+    m_players[1].m_score = p2Score;
     m_firstPlayer = first;
 }
 
@@ -17,7 +17,7 @@ Tournament::~Tournament()
 
 bool Tournament::PlayTournament()
 {
-    // If the round number is 0, this is a brand new tournament. // Decide who plays first based on 
+    // If the round number is 0, this is a brand new tournament. Decide who plays first based on 
     // a dice roll.
     if (m_roundNum == 0) {
         m_firstPlayer = ThrowDice();
@@ -31,13 +31,12 @@ bool Tournament::PlayTournament()
     if (!m_currentGame.IsInitialized()) {
         ConfigureGame(player1, player2);
         m_roundNum++;
-        // Tell the user that which round we are on.
-        cout << "Starting round #" << m_roundNum << "\n";
+        cout << "Starting";
     }
     else {
-        // Tell the user that which round we are on.
-        cout << "Resuming round #" << m_roundNum << "\n";
+        cout << "Resuming";
     }
+    cout << " round #" << m_roundNum << "\n";
     
     // Play the game.
     bool isComplete = m_currentGame.PlayGame();
@@ -45,7 +44,27 @@ bool Tournament::PlayTournament()
     // If the game was completed successfully, we can ask the player if they want to play another.
     // If unsuccessful, a player chose to save and quit, so we need to serialize.
     if (isComplete) {
-        cout << "Display winnings information here. Ask if user wants to play again.\n\n";
+        // Get the final number of points that each player wound up with.
+        int p1Points = m_currentGame.GetPlayer(1).GetPoints();
+        int p2Points = m_currentGame.GetPlayer(2).GetPoints();
+
+        if (p1Points == p2Points) {
+            cout << "The game was a tie! Neither player will recieve points this round. \n\n";
+        }
+        else {
+            int ptsEarned = abs(p1Points - p2Points);
+
+            // Tell the user what the final score was.
+            cout << "\n";
+            cout << "Player 1 scored " << p1Points << "\n";
+            cout << "Player 2 scored " << p2Points << "\n";
+            int winner = (p1Points > p2Points) ? 1 : 2;
+            cout << "Player " << winner << " wins and gets " << ptsEarned << " points this round. \n\n";
+
+            m_players[winner - 1].m_score += ptsEarned;
+        }
+
+        cout << "Ask if user wants to play again.\n\n";
     }
     else {
         cout << "User chose to serialize the game. Do that here.\n";
@@ -136,10 +155,10 @@ void Tournament::ConfigureGame(Player*& p1, Player*& p2)
 
     // Create new player objects for this game.
     p1 = new Human(p1Color);
-    if (m_p2Type == Player::human) {
+    if (m_players[1].m_type == Player::human) {
         p2 = new Human(p2Color);
     }
-    else if (m_p2Type == Player::computer) {
+    else if (m_players[1].m_type == Player::computer) {
         p2 = new Computer(p2Color);
     }
     else {
