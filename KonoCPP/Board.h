@@ -24,8 +24,6 @@ public:
     // Constructs a board object based on a vector of serialization data.
     Board(vector<string>);
 
-    ~Board();
-
     // Holds information about each board location.
     struct Cell {
         helpers::Color owner = helpers::NullColor;

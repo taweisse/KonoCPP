@@ -64,10 +64,6 @@ Board::Board(vector<string> data) {
     }
 }
 
-Board::~Board()
-{
-}
-
 // Moves a player's piece on the board. Returns -1 if the move was unsuccessful. Returns the number
 // of points gained or lost from this move, or -1 if the move was not successful. This function 
 // accepts 1 - indexed coordinates.
@@ -180,12 +176,12 @@ helpers::Color Board::GetWinner()
         for (int j = 0; j < m_boardSize; j++) {
             helpers::Color thisOwner = m_boardArray[i][j].owner;
             helpers::Color thisOccupant = m_boardArray[i][j].occupant.GetColor();
-            if (thisOwner == thisOccupant && thisOccupant != helpers::NullColor) {
-                if (thisOccupant == helpers::White) {
-                    whiteWin = false;
-                }
-                else {
+            if (thisOwner != helpers::NullColor && (thisOccupant == helpers::NullColor || thisOccupant == thisOwner)) {
+                if (thisOwner == helpers::White) {
                     blackWin = false;
+                }
+                else if(thisOwner == helpers::Black) {
+                    whiteWin = false;
                 }
             }
         }

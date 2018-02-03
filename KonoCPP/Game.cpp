@@ -29,11 +29,6 @@ Game::~Game()
 // Starts a game.
 bool Game::PlayGame() 
 {
-    // Ask the user how big of a board they want.
-    int size = helpers::ShowMenu("Please select a board size for this game:", { "5 x 5", "7 x 7", "9 x 9" });
-    cout << "\n";
-    m_gameboard = Board(((size + 1) * 2) + 1);
-
     // Display initial setup to the user.
     for (int i = 0; i < 2; i++) {
         cout << "Player " << i + 1 << " is ";

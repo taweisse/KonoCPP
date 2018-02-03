@@ -45,25 +45,22 @@ int main()
         default:
             exit(0);
         }
+        cout << "\n";
+
         // Start the tournament. The tournament object will take care of the rest. When it has ended,
         // we will ask the user if they would like to play again.
         thisTournament.PlayTournament();
     }
 
-
-    vector<string> testData = { "O", "W", "W", "W", "B", "O", "O", "WW", "WW", "B", "BB", "O", "O", "O", "W", "WW", "O", "W", "B", "WW", "O", "O", "O", "O", "O" };
+    vector<string> testData = { "B", "B", "B", "B", "B", "B", "O", "O", "O", "O", "O", "O", "O", "B", "O", "WW", "O", "W", "B", "WW", "O", "O", "O", "O", "O" };
     Board t1(testData);
     BoardView testView;
-    testView.Draw(t1);
-    system("pause");
 
-    system("cls");
-    DisplayLogo();
 
     Human p1(helpers::White);
     Human p2(helpers::Black);
 
-    Game game(p1, p2, 2);
+    Game game(p1, p2, 2, testData);
     game.PlayGame();
     system("pause");
 }

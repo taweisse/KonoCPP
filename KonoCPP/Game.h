@@ -21,6 +21,15 @@ public:
         return *m_players[i - 1];
     }
 
+    // Tests to see if this game has actually started, or if is a new object.
+    inline const bool IsInitialized() const {
+        // Uninitialized board objects will have size 0.
+        if (m_gameboard.GetSize() == 0) {
+            return false;
+        }
+        return true;
+    }
+
 private:
     Player* m_players[2];
     Board m_gameboard;
