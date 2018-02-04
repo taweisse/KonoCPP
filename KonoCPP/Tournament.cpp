@@ -88,8 +88,11 @@ bool Tournament::PlayTournament()
                 break;
             }
         }
+        // Game was not complete. User wants to serialize the game.
         else {
-            cout << "User chose to serialize the game. Do that here.\n";
+            // Returning false lets the caller know that this tournament is not complete, and so to 
+            // serialize it.
+            return false;
         }
     }
     

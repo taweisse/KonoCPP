@@ -17,6 +17,20 @@ public:
         return m_roundNum;
     }
 
+    const int GetPlayerType(int num) const {
+        if (num != 1 && num != 2) {
+            throw invalid_argument("There are only 2 players.");
+        }
+        return m_players[num - 1].m_type;
+    }
+
+    const int GetPlayerScore(int num) const {
+        if (num != 1 && num != 2) {
+            throw invalid_argument("There are only 2 players.");
+        }
+        return m_players[num - 1].m_score;
+    }
+
     // Starts a new tournament.
     bool PlayTournament();
 

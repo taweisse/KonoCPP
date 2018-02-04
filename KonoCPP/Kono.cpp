@@ -5,6 +5,7 @@
 #include "Human.h"
 #include "Game.h"
 #include "Helpers.h"
+#include "Serializer.h"
 using namespace std;
 
 void DisplayLogo();
@@ -41,6 +42,7 @@ int main()
             break;
         case 2:
             cout << "Load from serialization.\n";
+            // Serialization  will provide a tournament file. Set that tournament file to thisTournament and play it.
             break;
         default:
             exit(0);
@@ -49,8 +51,25 @@ int main()
 
         // Start the tournament. The tournament object will take care of the rest. When it has ended,
         // we will ask the user if they would like to play again.
-        thisTournament.PlayTournament();
+        bool isComplete = thisTournament.PlayTournament();
+        if (!isComplete) {
+            // if the tournament is not complete, serialize it here.
+            string filename;
+            cout << "Please enter a filename to save to: \n";
+            getline(cin, filename);
+
+            bool didSave = Serializer::SerializeToFile(thisTournament, filename);
+            if (didSave) {
+                cout << "File saved successfully. ";
+            }
+            else {
+                cout << "Error saving file. ";
+            }
+            system("pause");
+            exit(0);
+        }
     }
+
 
     vector<string> testData = { "B", "B", "B", "B", "B", "B", "O", "O", "O", "O", "O", "O", "O", "B", "O", "WW", "O", "W", "B", "WW", "O", "O", "O", "O", "O" };
     Board t1(testData);

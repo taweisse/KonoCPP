@@ -21,6 +21,15 @@ public:
         return *m_players[i - 1];
     }
 
+    inline const Board GetBoard() const {
+        return m_gameboard;
+    }
+
+    // Get the player who will make the next move.
+    inline const int GetNextPlayer() const {
+        return m_curPlayer + 1;
+    }
+
     // Tests to see if this game has actually started, or if is a new object.
     inline const bool IsInitialized() const {
         // Uninitialized board objects will have size 0.
