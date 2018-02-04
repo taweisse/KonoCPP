@@ -3,14 +3,14 @@
 Game::Game()
 {
     // Default constructor creates generic objects.
-    m_players[0] = &Player();
-    m_players[1] = &Player();
+    m_players[0] = nullptr;
+    m_players[1] = nullptr;
     m_gameboard = Board();
     m_renderer = BoardView();
     m_curPlayer = 0;
 }
 
-Game::Game(Player& p1, Player &p2, int curPlayer, Board board)
+Game::Game(Player& p1, Player& p2, int curPlayer, Board board)
 {
     m_players[0] = &p1;
     m_players[1] = &p2;
@@ -23,7 +23,27 @@ Game::Game(Player& p1, Player &p2, int curPlayer, Board board)
 }
 
 Game::~Game()
+{   
+    // Free memory used by player objects.
+    //delete m_players[0];
+    //delete m_players[1];
+}
+
+Game& Game::operator= (const Game& other)
 {
+    if (this != &other) {
+        // Free old player objects.
+        delete m_players[0];
+        delete m_players[1];
+
+        // Copy new values.
+        m_players[0] = other.m_players[0];
+        m_players[1] = other.m_players[1];
+        m_gameboard = other.m_gameboard;
+        m_renderer = other.m_renderer;
+        m_curPlayer = other.m_curPlayer;
+    }
+    return *this;
 }
 
 // Starts a game.

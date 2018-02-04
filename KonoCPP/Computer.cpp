@@ -1,9 +1,9 @@
 #include "Computer.h"
 
-Computer::Computer(helpers::Color color)
+Computer::Computer(const helpers::Color& color, const int& pts)
 {
     m_color = color;
-    m_points = 0;
+    m_points = pts;
 }
 
 const Move Computer::PrePlay(Board& board)

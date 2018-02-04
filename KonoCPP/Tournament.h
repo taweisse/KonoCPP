@@ -7,7 +7,6 @@ class Tournament
 {
 public:
     Tournament(Player::PlayerType = Player::player, Player::PlayerType = Player::player, Game = Game(), int = 0, int = 0, int = 0, int = 1);
-    ~Tournament();
 
     const Game GetGame() const {
         return m_currentGame;

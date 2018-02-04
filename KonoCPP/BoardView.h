@@ -11,8 +11,5 @@ using namespace std;
 class BoardView
 {
 public:
-    BoardView();
-    ~BoardView();
-
-    void Draw(Board board) const;
+    static void Draw(Board board);
 };

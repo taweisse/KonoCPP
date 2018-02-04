@@ -1,11 +1,6 @@
-#include "BoardView.h"
 #include "Tournament.h"
-#include "Board.h"
-#include "Player.h"
-#include "Human.h"
-#include "Game.h"
-#include "Helpers.h"
 #include "Serializer.h"
+#include "Helpers.h"
 using namespace std;
 
 void DisplayLogo();
@@ -25,6 +20,7 @@ int main()
         Player::PlayerType p2Type = Player::player;
 
         // Ask the user what they want to do.
+        string filename;
         switch (helpers::ShowMenu("Welcome! What do you want to do?", { "Start a New Tournament", "Load a Saved Tournament", "Exit" })) {
         case 1:
             // Start a new tournament. First, determine the human's opponent.
@@ -41,9 +37,17 @@ int main()
             thisTournament = Tournament(p1Type, p2Type);
             break;
         case 2:
-            cout << "Load from serialization.\n";
-            // Serialization  will provide a tournament file. Set that tournament file to thisTournament and play it.
-            break;
+            cout << "Please enter a filename to load from: \n";
+            getline(cin, filename);
+            if (Serializer::UnserializeFromFile(thisTournament, filename)) {
+                system("pause");
+                exit(0);
+                // WE NEED TO ACTUALLY break; HERE!!! - to then go and play the tournament.
+            }
+            else {
+                cout << "Can't load file.";
+                system("pause");
+            }
         default:
             exit(0);
         }

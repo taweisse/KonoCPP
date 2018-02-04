@@ -1,9 +1,9 @@
 #include "Human.h"
 
-Human::Human(const helpers::Color color)
+Human::Human(const helpers::Color& color, const int& pts)
 {
     m_color = color;
-    m_points = 0;
+    m_points = pts;
 }
 
 const Move Human::PrePlay(Board& board)

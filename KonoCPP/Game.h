@@ -3,6 +3,7 @@
 #include <string>
 #include <stdlib.h>
 #include <time.h>
+#include <memory>
 #include "Human.h"
 #include "Computer.h"
 #include "Board.h"
@@ -15,10 +16,13 @@ public:
     Game(Player&, Player&, int, Board = Board());
     ~Game();
 
+    Game& operator= (const Game& other);
+
     bool PlayGame();
     
-    inline const Player GetPlayer(int i) const {
-        return *m_players[i - 1];
+    inline const Player* const GetPlayer(int i) const {
+        //return m_players[i - 1].get();
+        return m_players[i - 1];
     }
 
     inline const Board GetBoard() const {
@@ -40,6 +44,7 @@ public:
     }
 
 private:
+    //unique_ptr<Player> m_players[2];
     Player* m_players[2];
     Board m_gameboard;
     BoardView m_renderer;

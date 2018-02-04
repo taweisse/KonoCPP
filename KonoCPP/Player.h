@@ -36,6 +36,10 @@ public:
         return player;
     }
 
+    inline void AddPoints(int pts) {
+        m_points += pts;
+    }
+
 protected:
     int m_points;
     helpers::Color m_color;

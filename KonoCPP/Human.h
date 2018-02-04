@@ -8,7 +8,7 @@ class Human : public Player
 {
 public:
 
-    Human(const helpers::Color = helpers::NullColor);
+    Human(const helpers::Color& = helpers::NullColor, const int& = 0);
 
     // Displays a menu to the player before they actually make a move.
     virtual const Move PrePlay(Board&);

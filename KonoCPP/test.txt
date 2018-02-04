@@ -1,0 +1,18 @@
+Round: 1
+
+Human 2:
+   Score: 0
+   Color: White
+
+Human:
+   Score: 0
+   Color: Black
+
+Board:
+   W  W  W  W  W  
+   W  O  O  O  W  
+   O  O  O  O  O  
+   B  O  O  O  B  
+   B  B  B  B  B  
+
+Next Player: Human 2

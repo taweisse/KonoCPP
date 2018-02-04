@@ -11,10 +11,6 @@ Tournament::Tournament(Player::PlayerType p1, Player::PlayerType p2, Game game, 
     m_firstPlayer = first;
 }
 
-Tournament::~Tournament()
-{
-}
-
 bool Tournament::PlayTournament()
 {
     // Pointers used to reference the players of each game.
@@ -50,8 +46,8 @@ bool Tournament::PlayTournament()
         // If unsuccessful, a player chose to save and quit, so we need to serialize.
         if (isComplete) {
             // Get the final number of points that each player wound up with.
-            int p1Points = m_currentGame.GetPlayer(1).GetPoints();
-            int p2Points = m_currentGame.GetPlayer(2).GetPoints();
+            int p1Points = m_currentGame.GetPlayer(1)->GetPoints();
+            int p2Points = m_currentGame.GetPlayer(2)->GetPoints();
 
             if (p1Points == p2Points) {
                 cout << "The game was a tie! Neither player will recieve points this round. \n\n";
@@ -108,12 +104,7 @@ bool Tournament::PlayTournament()
         cout << "\n\n";
     }
 
-
     system("pause");
-
-    // Clean up the previous game's player objects.
-    delete player2;
-    delete player1;
     return true;
 }
 
@@ -164,8 +155,6 @@ void Tournament::ConfigureGame(Player*& p1, Player*& p2)
 {
     // In case we were passed a player pointer that had already been used, make sure we free the
     // old allocated memory.
-    delete p1;
-    delete p2;
     p1 = nullptr;
     p2 = nullptr;
 

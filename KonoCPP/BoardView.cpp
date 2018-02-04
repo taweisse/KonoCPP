@@ -1,14 +1,6 @@
 #include "BoardView.h"
 
-BoardView::BoardView()
-{
-}
-
-BoardView::~BoardView()
-{
-}
-
-void BoardView::Draw(Board boardObj) const
+void BoardView::Draw(Board boardObj)
 {
     // Define board and player colors as constants for clarity.
     const WORD normColor  = 0x07;
