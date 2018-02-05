@@ -41,14 +41,13 @@ bool Serializer::SerializeToFile(const Tournament& tourn, const string& filename
     outFile << "Human:\n   Score: " << tourn.GetPlayerScore(1) << "\n   Color: " << p1Color << "\n\n";
 
     // Write the board data.
-    vector<vector<Board::Cell>> curBoard = tourn.GetGame().GetBoard().GetBoardArray();
     int boardSize = tourn.GetGame().GetBoard().GetSize();
     outFile << "Board:";
-    for (int i = 0; i < boardSize; i++) {
+    for (int i = 1; i <= boardSize; i++) {
         // New line for each new row.
         outFile << "\n   ";
-        for (int j = 0; j < boardSize; j++) {
-            Piece thisPiece = curBoard[i][j].occupant;
+        for (int j = 1; j <= boardSize; j++) {
+            Piece thisPiece = tourn.GetGame().GetBoard().GetOccupant(i, j);
 
             // Represent super pieces with 2 characters instead of one.
             if (thisPiece.CanCapture()) {

@@ -43,4 +43,15 @@ public:
 protected:
     int m_points;
     helpers::Color m_color;
+
+    Move BestMove(const Board&, int, int);
+    Move MoveToEmptySpace(const Board&, int, int);
+    Move MoveToHome(const Board&, int, int);
+    Move MoveTowards(const Board&, int, int, int, int);
+    Move::Direction GetDirection(int, int);
+
+    // returns the distance between two sets of coordinates.
+    int GetDistance(int curR, int curC, int tarR, int tarC) {
+        return (abs(curR - tarR) + abs(curC - tarC));
+    }
 };

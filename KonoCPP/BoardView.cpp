@@ -1,6 +1,6 @@
 #include "BoardView.h"
 
-void BoardView::Draw(Board boardObj)
+void BoardView::Draw(Board board)
 {
     // Define board and player colors as constants for clarity.
     const WORD normColor  = 0x07;
@@ -18,8 +18,7 @@ void BoardView::Draw(Board boardObj)
     CONSOLE_SCREEN_BUFFER_INFO csbi;
     GetConsoleScreenBufferInfo(hstdout, &csbi);
 
-    int boardSize = boardObj.GetSize();
-    vector<vector<Board::Cell>> board = boardObj.GetBoardArray();
+    int boardSize = board.GetSize();
 
     // Set the board to the normal background colors.
     SetConsoleTextAttribute(hstdout, normColor);
@@ -31,7 +30,7 @@ void BoardView::Draw(Board boardObj)
         cout << "\n" << i + 1 << "   ";
         for (int j = 0; j < boardSize; j++) {
             // Get the occupant at the current cell.
-            Piece occupant = board[i][j].occupant;
+            Piece occupant = board.GetOccupant(i + 1, j + 1);
             helpers::Color occColor = occupant.GetColor();
 
             // Switch to board colors.

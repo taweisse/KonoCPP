@@ -24,17 +24,6 @@ public:
     // Constructs a board object based on a vector of serialization data.
     Board(vector<string>, int&, int&);
 
-    // Holds information about each board location.
-    struct Cell {
-        helpers::Color owner = helpers::NullColor;
-        Piece occupant = Piece();
-        int value = 0;
-    };
-
-    inline const vector<vector<Cell>> GetBoardArray() const {
-        return m_boardArray;
-    }
-
     inline const int GetSize() const {
         return m_boardSize;
     }
@@ -43,10 +32,29 @@ public:
 
     const char GetOccupantColor(const int& row, const int& col) const;
 
+    const helpers::Color GetOwner(int r, int c) const {
+        return m_boardArray[r - 1][c - 1].owner;
+    }
+
+    const Piece GetOccupant(int r, int c) const {
+        return m_boardArray[r - 1][c - 1].occupant;
+    }
+
+    const int GetValue(int r, int c) const {
+        return m_boardArray[r - 1][c - 1].value;
+    }
+
     // Determines if there is a winner for this game. Returns NullColor if not.
     helpers::Color GetWinner();
 
 private:
+    // Holds information about each board location.
+    struct Cell {
+        helpers::Color owner = helpers::NullColor;
+        Piece occupant = Piece();
+        int value = 0;
+    };
+
     vector<vector<Cell>> m_boardArray;
     int m_boardSize;
     
