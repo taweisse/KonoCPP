@@ -33,14 +33,23 @@ public:
     const char GetOccupantColor(const int& row, const int& col) const;
 
     const helpers::Color GetOwner(int r, int c) const {
+        if (r < 1 || r > m_boardSize || c < 1 || c > m_boardSize) {
+            throw invalid_argument("you are off the board.");
+        }
         return m_boardArray[r - 1][c - 1].owner;
     }
 
     const Piece GetOccupant(int r, int c) const {
+        if (r < 1 || r > m_boardSize || c < 1 || c > m_boardSize) {
+            throw invalid_argument("you are off the board.");
+        }
         return m_boardArray[r - 1][c - 1].occupant;
     }
 
     const int GetValue(int r, int c) const {
+        if (r < 1 || r > m_boardSize || c < 1 || c > m_boardSize) {
+            throw invalid_argument("you are off the board.");
+        }
         return m_boardArray[r - 1][c - 1].value;
     }
 

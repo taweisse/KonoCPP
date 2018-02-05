@@ -43,6 +43,10 @@ const Move Player::Play(Board& board)
     // Use the values of the enum to rank each move.
     int bestReason = 0;
     for (int i = 0; i < (int)possibleMoves.size(); i++) {
+        // Skip invalid moves.
+        if (!possibleMoves[i].IsValid()) {
+            continue;
+        }
         if (possibleMoves[i].GetReason() > bestReason) {
             bestMove = possibleMoves[i];
         }
@@ -62,7 +66,7 @@ Move Player::BestMove(const Board& board, int r, int c)
             continue;
         }
         for (int j = -1; j <= 1; j++) {
-            if (i == 0) {
+            if (j == 0) {
                 continue;
             }
             // Get the neighboring piece. If we are off the board, skip it.
@@ -100,7 +104,7 @@ Move Player::MoveToEmptySpace(const Board& board, int r, int c) {
             continue;
         }
         for (int j = -1; j <= 1; j++) {
-            if (i == 0) {
+            if (j == 0) {
                 continue;
             }
             // Get the neighboring piece. If we are off the board, skip it.
@@ -136,7 +140,7 @@ Move Player::MoveToHome(const Board& board, int r, int c) {
             Piece targetPiece = board.GetOccupant(i, j);
             helpers::Color targetOwner = board.GetOwner(i, j);
             // See if the current scan location is an opponent's home cell and if it is empty.
-            if (targetOwner != m_color && targetOwner != helpers::NullColor && targetPiece.IsEmpty()) {
+            if (targetOwner != m_color && targetOwner != helpers::NullColor) {
                 int dist = GetDistance(r, i, c, j);
                 // If the number is odd, no good. This means that we cant actually reach this home
                 // location due to the nature of only being able to move diagonally.
@@ -163,7 +167,7 @@ Move Player::MoveToHome(const Board& board, int r, int c) {
 
 // Moves towards a target location, if possible.
 Move Player::MoveTowards(const Board& board, int curR, int curC, int targetR, int targetC) {
-    int dist = GetDistance(curR, targetR, curC, targetC);
+    int dist = GetDistance(curR, curC, targetR, targetC);
 
     // Look at all neighbors.
     for (int i = -1; i <= 1; i++) {
@@ -171,11 +175,11 @@ Move Player::MoveTowards(const Board& board, int curR, int curC, int targetR, in
             continue;
         }
         for (int j = -1; j <= 1; j++) {
-            if (i == 0) {
+            if (j == 0) {
                 continue;
             }
             // Skip this straight away if it doesn't move us closer to the target.
-            if (dist > GetDistance(curR + i, curC + j, targetR, targetC)) {
+            if (dist < GetDistance(curR + i, curC + j, targetR, targetC)) {
                 continue;
             }
 
@@ -200,15 +204,15 @@ Move Player::MoveTowards(const Board& board, int curR, int curC, int targetR, in
 // Gets a cardinal direction based of of positive and negative offsets from a point.
 Move::Direction Player::GetDirection(int rOffset, int cOffset) {
     if (rOffset < 0 && cOffset < 0) {
-        return Move::SW;
-    }
-    else if (rOffset > 0 && cOffset < 0) {
         return Move::NW;
     }
-    else if (rOffset > 0 && cOffset > 0) {
+    else if (rOffset < 0 && cOffset > 0) {
         return Move::NE;
     }
-    else {
+    else if (rOffset > 0 && cOffset > 0) {
         return Move::SE;
+    }
+    else {
+        return Move::SW;
     }
 }
