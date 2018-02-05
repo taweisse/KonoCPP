@@ -22,7 +22,7 @@ public:
     Board(int);
 
     // Constructs a board object based on a vector of serialization data.
-    Board(vector<string>);
+    Board(vector<string>, int&, int&);
 
     // Holds information about each board location.
     struct Cell {

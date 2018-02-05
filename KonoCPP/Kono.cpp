@@ -40,9 +40,8 @@ int main()
             cout << "Please enter a filename to load from: \n";
             getline(cin, filename);
             if (Serializer::UnserializeFromFile(thisTournament, filename)) {
-                system("pause");
-                exit(0);
-                // WE NEED TO ACTUALLY break; HERE!!! - to then go and play the tournament.
+                cout << "File loaded successfully. \n";
+                break;
             }
             else {
                 cout << "Can't load file.";
@@ -73,19 +72,6 @@ int main()
             exit(0);
         }
     }
-
-
-    vector<string> testData = { "B", "B", "B", "B", "B", "B", "O", "O", "O", "O", "O", "O", "O", "B", "O", "WW", "O", "W", "B", "WW", "O", "O", "O", "O", "O" };
-    Board t1(testData);
-    BoardView testView;
-
-
-    Human p1(helpers::White);
-    Human p2(helpers::Black);
-
-    Game game(p1, p2, 2, testData);
-    game.PlayGame();
-    system("pause");
 }
 
 void DisplayLogo() {

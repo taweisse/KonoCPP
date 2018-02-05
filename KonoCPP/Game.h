@@ -21,7 +21,6 @@ public:
     bool PlayGame();
     
     inline const Player* const GetPlayer(int i) const {
-        //return m_players[i - 1].get();
         return m_players[i - 1];
     }
 

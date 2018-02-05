@@ -1,18 +1,22 @@
-Round: 1
+Round: 3
 
 Human 2:
-   Score: 0
+   Score: 5
    Color: White
 
 Human:
-   Score: 0
+   Score: 5
    Color: Black
 
 Board:
-   W  W  W  W  W  
-   W  O  O  O  W  
-   O  O  O  O  O  
-   B  O  O  O  B  
-   B  B  B  B  B  
+   W  W  W  W  W  W  W  W  W  
+   W  O  O  O  O  O  O  O  W  
+   O  O  O  O  O  O  O  O  O  
+   O  O  O  O  O  O  O  O  O  
+   O  O  O  O  O  O  O  O  O  
+   O  O  O  O  O  O  O  O  O  
+   O  O  O  O  O  O  O  O  O  
+   B  O  O  O  O  O  O  B  B  
+   B  B  B  B  B  B  B  B  O  
 
 Next Player: Human 2

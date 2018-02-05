@@ -7,7 +7,7 @@ Board::Board(int size)
     InitializeBoard(size);
 }
 
-Board::Board(vector<string> data) {
+Board::Board(vector<string> data, int& p1pts, int& p2pts) {
     int numCells = data.size();
     if (numCells == 25 || numCells == 49 || numCells == 81) {
         // Load a default board. We will move the occupant locations to where they need to be.

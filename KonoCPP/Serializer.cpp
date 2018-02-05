@@ -175,18 +175,46 @@ bool Serializer::UnserializeFromFile(Tournament& tourn, const string& filename)
 
     // Contruct the board object for the resumed game. The board constructor will throw an exception
     // if the board data that we read was bad.
-    int whiteGamePts, blackGamePts; // Variables will be updated by the board constructor to reflect what
-                                    // point values each color player would have.
+    int whiteGamePts = 0, blackGamePts = 0; // Variables will be updated by the board constructor to reflect what
+                                            // point values each color player would have.
+    Board loadedBoard;
     try {
-        Board loadedBoard(boardData);
+        loadedBoard = Board(boardData, whiteGamePts, blackGamePts);
     }
     catch (invalid_argument) {
         // Return not successful if the board data from the file was invalid.
         return false;
     }
 
-    // Construct the loaded game object. The game object will accept 
+    int p1GamePoints, p2GamePoints;
+    if (p1Color == helpers::White) {
+        p1GamePoints = whiteGamePts;
+        p2GamePoints = blackGamePts;
+    }
+    else {
+        p1GamePoints = blackGamePts;
+        p2GamePoints = whiteGamePts;
+    }
 
+    // Construct the correct players for this game. Player 1 will always be a human.
+    Player* player1 = new Human(p1Color, p1GamePoints);
+
+    // Decide which type player 2 is.
+    Player* player2;
+    if (p2Type == Player::human) {
+        player2 =  new Human(p2Color, p2GamePoints);
+    }
+    else {
+        player2 =  new Computer(p2Color, p2GamePoints);
+    }
+    
+    // Construct the game object from our board and players.
+    Game loadedGame(*player1, *player2, nextPlayer, loadedBoard);
+
+    // Construct the tournament from the game.
+    tourn = Tournament(p1Type, p2Type, loadedGame, round, p1Score, p2Score, nextPlayer);
+
+    // Return that the game loaded successfully.
     return true;
 }
 
