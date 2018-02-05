@@ -161,6 +161,9 @@ bool Serializer::UnserializeFromFile(Tournament& tourn, const string& filename)
             }
         }
     }
+    // Close the file.
+    inFile.close();
+
     // Check to make sure that all values were successfully read from the file. If any are missing, we
     // will return false to indicate that the file was not read successfully.
     if (p1Type == Player::player || p2Type == Player::player) {

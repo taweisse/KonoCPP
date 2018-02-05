@@ -24,8 +24,7 @@ int main()
         switch (helpers::ShowMenu("Welcome! What do you want to do?", { "Start a New Tournament", "Load a Saved Tournament", "Exit" })) {
         case 1:
             // Start a new tournament. First, determine the human's opponent.
-            cout << "\n";
-            switch (helpers::ShowMenu("Who do you want to play against?", { "Human", "Computer" })) {
+            switch (helpers::ShowMenu("\nWho do you want to play against?", { "Human", "Computer" })) {
             case 1:
                 p2Type = Player::human;
                 break;
@@ -37,14 +36,14 @@ int main()
             thisTournament = Tournament(p1Type, p2Type);
             break;
         case 2:
-            cout << "Please enter a filename to load from: \n";
+            cout << "\nPlease enter a filename to load from: \n";
             getline(cin, filename);
             if (Serializer::UnserializeFromFile(thisTournament, filename)) {
                 cout << "File loaded successfully. \n";
                 break;
             }
             else {
-                cout << "Can't load file.";
+                cout << "Could not load file. \n";
                 system("pause");
             }
         default:

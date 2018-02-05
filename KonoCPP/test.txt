@@ -9,14 +9,10 @@ Human:
    Color: Black
 
 Board:
-   W  W  W  W  W  W  W  W  W  
-   W  O  O  O  O  O  O  O  W  
-   O  O  O  O  O  O  O  O  O  
-   O  O  O  O  O  O  O  O  O  
-   O  O  O  O  O  O  O  O  O  
-   O  O  O  O  O  O  O  O  O  
-   O  O  O  O  O  O  O  O  O  
-   B  O  O  O  O  O  O  B  B  
-   B  B  B  B  B  B  B  B  O  
+   BB BB BB BB O
+   BB O  O  B  BB
+   O  O  O  W  O
+   WW W  O  W  WW
+   WW O  O  WW O
 
 Next Player: Human 2

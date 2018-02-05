@@ -24,9 +24,6 @@ bool Tournament::PlayTournament()
         if (m_roundNum == 0) {
             m_firstPlayer = ThrowDice();
         }
-        else {
-            cout << "Player " << m_firstPlayer << " won last round. He will move first.\n";
-        }
 
         // If the current game is not initialized, initialize it.
         if (!m_currentGame.IsInitialized()) {
@@ -37,7 +34,7 @@ bool Tournament::PlayTournament()
         else {
             cout << "Resuming";
         }
-        cout << " round #" << m_roundNum << "\n";
+        cout << " round #" << m_roundNum << ":\n";
 
         // Play the game.
         bool isComplete = m_currentGame.PlayGame();
@@ -113,21 +110,36 @@ int Tournament::ThrowDice()
     // Seed the random number generator.
     srand((int)time(NULL));
 
+    // If a file is provided to get our dice rolls from, load all of the values into a vector
+    // to use later.
+    list<int> diceRolls;
+    string line;
+    if (m_diceFile.length() != 0) {
+        ifstream inFile(m_diceFile);
+        while (getline(inFile, line)) {
+            istringstream nums(line);
+            int x;
+            for (int i = 0; i < 2; i++) {
+                nums >> x;
+                diceRolls.push_back(x);
+            }
+        }
+    }
+
     int p1Sum, p2Sum;
     do {
         int lineNum = 1;
         int rolls[4];
 
-        // If no dice file is specified, roll 4 random numbers.
-        if (m_diceFile.length() == 0) {
-            for (int i = 0; i < 4; i++) {
+        // Roll 4 random numbers, or use those provided in the file.
+        for (int i = 0; i < 4; i++) {
+            if (diceRolls.size() == 0) {
                 rolls[i] = rand() % 6 + 1;
             }
-        }
-        else {
-            cout << "We don't support dice from a file yet.";
-            system("pause");
-            exit(0);
+            else {
+                rolls[i] = diceRolls.front();
+                diceRolls.pop_front();
+            }
         }
 
         p1Sum = rolls[0] + rolls[1];
@@ -160,20 +172,31 @@ void Tournament::ConfigureGame(Player*& p1, Player*& p2)
 
     // Let player 1 pick his color for this game.
     helpers::Color p1Color, p2Color;
-    string menuTitle = "Select a color, Player " + to_string(m_firstPlayer) + ":";
-    int colorChoice = helpers::ShowMenu(menuTitle, { "White", "Black" });
-    if ((colorChoice == 1 && m_firstPlayer == 1) || (colorChoice == 2 && m_firstPlayer == 2)) {
-        p1Color = helpers::White;
-        p2Color = helpers::Black;
+
+    // If a human is playing first, let them pick the color they want. Otherwise, the computer will
+    // pick.
+    if (m_players[m_firstPlayer - 1].m_type == Player::human) {
+        string menuTitle = "Select a color, Player " + to_string(m_firstPlayer) + ":";
+        int colorChoice = helpers::ShowMenu(menuTitle, { "White", "Black" });
+        if ((colorChoice == 1 && m_firstPlayer == 1) || (colorChoice == 2 && m_firstPlayer == 2)) {
+            p1Color = helpers::White;
+            p2Color = helpers::Black;
+        }
+        else if ((colorChoice == 1 && m_firstPlayer == 2) || (colorChoice == 2 && m_firstPlayer == 1)) {
+            p1Color = helpers::Black;
+            p2Color = helpers::White;
+        }
+        else {
+            throw invalid_argument("There is a bug in the game configuration somewhere.");
+        }
+        cout << "\n";
     }
-    else if ((colorChoice == 1 && m_firstPlayer == 2) || (colorChoice == 2 && m_firstPlayer == 1)) {
-        p1Color = helpers::Black;
-        p2Color = helpers::White;
-    }
+    // Have the computer select a color.
     else {
-        throw invalid_argument("There is a bug in the game configuration somewhere.");
+        p2Color = helpers::White;
+        p1Color = helpers::Black;
+        cout << "The computer chooses to be white. \n\n";
     }
-    cout << "\n";
 
     // Ask the user how big of a board they want.
     int size = helpers::ShowMenu("Select a board size for this game:", { "5 x 5", "7 x 7", "9 x 9" });

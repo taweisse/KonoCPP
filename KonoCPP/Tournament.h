@@ -1,4 +1,7 @@
 #pragma once
+#include <fstream>
+#include <sstream>
+#include <list>
 #include "Game.h"
 #include "Player.h"
 using namespace std;
@@ -46,7 +49,7 @@ private:
 
     // If this string is not empty, the code that handles throwing dice will read from the filename
     // instead of randomly choosing numbers.
-    string m_diceFile = "";
+    string m_diceFile = "diceRolls.txt";
 
     int ThrowDice();
     void ConfigureGame(Player*&, Player*&);
