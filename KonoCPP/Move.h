@@ -11,8 +11,7 @@ public:
 
     // Constructors. Default, an actual move, and an action - only.
     Move(const Action& = Play);
-    Move(const int&, const int&, const Direction&, const Action&, const ActionReason& = Null);
-    ~Move();
+    Move(const int&, const int&, const Direction&, const Action&, const ActionReason& = Null, const int& tarR = -1, const int& tarC = -1);
 
     // Check to see if this is a valid action.
     const bool IsValid() const {
@@ -22,27 +21,35 @@ public:
         return true;
     }
 
-    void SetMove(const int&, const int&, const Direction&, const Action&, const ActionReason& = Null);
+    void SetMove(const int&, const int&, const Direction&, const Action&, const ActionReason&, const int&  = -1, const int&  = -1);
     
     // Access to all of the private variables:
-    inline const int GetRow() const {
+    const int GetRow() const {
         return m_row;
     }
 
-    inline const int GetCol() const {
+    const int GetCol() const {
         return m_col;
     }
 
-    inline const Direction GetDir() const {
+    const Direction GetDir() const {
         return m_dir;
     }
 
-    inline const Action GetAction() const {
+    const Action GetAction() const {
         return m_action;
     }
 
-    inline const ActionReason GetReason() const {
+    const ActionReason GetReason() const {
         return m_reason;
+    }
+
+    const int GetTargetRow() const {
+        return m_tarRow;
+    }
+
+    const int GetTargetCol() const {
+        return m_tarCol;
     }
 
 private:
@@ -51,5 +58,9 @@ private:
     Direction m_dir;
     Action m_action;
     ActionReason m_reason;
+
+    // The target of the move. (What we are moving towards / away from.)
+    int m_tarRow;
+    int m_tarCol;
 };
 

@@ -19,10 +19,11 @@ const Move Computer::PrePlay(Board& board)
         case 3:
             if (tmpMove.GetAction() != Move::Quit) {
                 cout << "The computer would like to keep playing. \n";
+                system("pause");
             }
         case 2:
             if (thisMove.GetAction() != Move::Quit) {
-                thisMove = Move(tmpMove.GetRow(), tmpMove.GetCol(), tmpMove.GetDir(), Move::Play, tmpMove.GetReason());
+                thisMove = Move(tmpMove.GetRow(), tmpMove.GetCol(), tmpMove.GetDir(), Move::Play, tmpMove.GetReason(), tmpMove.GetTargetRow(), tmpMove.GetTargetCol());
                 int pts;
                 if (!board.MakeMove(thisMove, pts)) {
                     continue;

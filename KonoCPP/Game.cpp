@@ -87,8 +87,9 @@ bool Game::PlayGame()
             }
             // If the user asked for help, we will display the move that the computer suggested.
             else if (thisMove.GetAction() == Move::Help) {
-                cout << "The computer suggests a ";
+                cout << "\nThe computer suggests a ";
                 PrintMove(thisMove);
+                cout << "\n";
                 continue;
             }
             // Return true if the player quits. This means the game is over.
@@ -145,7 +146,26 @@ void Game::PrintMove(const Move& move)
         cDest = c - 1;
     }
 
-    cout << " from (" << r << ", " << c << ") to (" << rDest << ", " << cDest << ").\n";
+    // Output the reasoning behind why this move was made.
+    cout << " from (" << r << ", " << c << ") to (" << rDest << ", " << cDest << ")\nto ";
+    switch (move.GetReason()) {
+    case Move::Advance:
+        cout << "advance towards the opponent's home location";
+        break;
+    case Move::Capture:
+        cout << "capture the opponent's piece";
+        break;
+    case Move::Escape:
+        cout << "escape being captured by the opponent";
+        break;
+    }
+
+    // If a target was provided in this move, output it as well.
+    if (move.GetTargetRow() != -1 && move.GetTargetCol() != -1) {
+        cout << " at (" << move.GetTargetRow() << ", " << move.GetTargetCol() << ")";
+    }
+    cout << ".\n";
+
     return;
 }
 

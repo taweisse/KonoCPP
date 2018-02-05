@@ -9,7 +9,7 @@ public:
     Computer(const helpers::Color& = helpers::NullColor, const int& = 0);
 
     // Returns the name of the player.
-    virtual inline const PlayerType GetType() const {
+    virtual const PlayerType GetType() const {
         return computer;
     }
 

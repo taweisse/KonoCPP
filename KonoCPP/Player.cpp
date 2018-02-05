@@ -86,11 +86,13 @@ Move Player::BestMove(const Board& board, int r, int c)
                 }
                 // If we can capture, lets do it. Return the move that will capture the opponent.
                 else if (board.GetOccupant(r, c).CanCapture()) {
-                    return Move(r, c, GetDirection(i, j), Move::Help, Move::Capture);
+                    return Move(r, c, GetDirection(i, j), Move::Help, Move::Capture, r + i, c + j);
                 }
             }
             // If there is no threat from an opponent, we should move towards the nearest home location.
-            return MoveToHome(board, r, c);
+            if (!board.GetOwner(r, c) == m_color) {
+                return MoveToHome(board, r, c);
+            }
         }
     }
     // If we cant do anything, return an invalid move to signal not to consider this one.
@@ -117,7 +119,7 @@ Move Player::MoveToEmptySpace(const Board& board, int r, int c) {
             }
             // If a neighboring space is empty, we will move there.
             if (neighbor.IsEmpty()) {
-                return Move(r, c, GetDirection(i, j), Move::Help, Move::ActionReason::Escape);
+                return Move(r, c, GetDirection(i, j), Move::Help, Move::ActionReason::Escape, r + i, c + j);
             }
         }
     }
@@ -182,6 +184,9 @@ Move Player::MoveTowards(const Board& board, int curR, int curC, int targetR, in
             if (dist < GetDistance(curR + i, curC + j, targetR, targetC)) {
                 continue;
             }
+            else if (dist > board.GetSize() / 2 && i > 0) {
+                continue;
+            }
 
             // Get the neighboring piece. If we are off the board, skip it.
             Piece neighbor;
@@ -193,7 +198,7 @@ Move Player::MoveTowards(const Board& board, int curR, int curC, int targetR, in
             }
             // If this space is free, return a move to it.
             if (neighbor.IsEmpty()) {  
-                return Move(curR, curC, GetDirection(i, j), Move::Help, Move::Advance);
+                return Move(curR, curC, GetDirection(i, j), Move::Help, Move::Advance, targetR, targetC);
             }
         }
     }
