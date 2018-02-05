@@ -18,7 +18,7 @@ const Move Computer::PrePlay(Board& board)
     }
 
     if (thisMove.GetAction() == Move::Play) {
-        "The computer has a good move and would like to keep playing. \n";
+        cout << "The computer would like to keep playing. \n";
     }
 
     // Return the move that we just played.

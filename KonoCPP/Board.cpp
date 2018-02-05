@@ -7,7 +7,9 @@ Board::Board(int size)
     InitializeBoard(size);
 }
 
-Board::Board(vector<string> data, int& p1pts, int& p2pts) {
+Board::Board(vector<string> data, int& whitePts, int& blackPts) {
+    whitePts = 0;
+    blackPts = 0;
     int numCells = data.size();
     if (numCells == 25 || numCells == 49 || numCells == 81) {
         // Load a default board. We will move the occupant locations to where they need to be.
@@ -23,6 +25,11 @@ Board::Board(vector<string> data, int& p1pts, int& p2pts) {
     int row, col;
     helpers::Color curColor;
     bool canCapture;
+
+    // These variables let us calculate the score that each color should have as we build the board.
+    // By knowing how many of each color there are, we can figure out how many have been captured.
+    int numWhite = 0, numBlack = 0;
+
     for (int i = 0; i < numCells; i++) {
         // Map the 1D data vector to our 2D board grid.
         row = (int)i / m_boardSize;
@@ -35,9 +42,19 @@ Board::Board(vector<string> data, int& p1pts, int& p2pts) {
             break;
         case 'W':
             curColor = helpers::White;
+            numWhite++;
+            // If this piece has reached a home location, update the score.
+            if (m_boardArray[row][col].owner == helpers::Black) {
+                whitePts += m_boardArray[row][col].value;
+            }
             break;
         case 'B':
             curColor = helpers::Black;
+            numBlack++;
+            // If this piece has reached a home location, update the score.
+            if (m_boardArray[row][col].owner == helpers::White) {
+                blackPts += m_boardArray[row][col].value;
+            }
             break;
         default:
             throw invalid_argument("Bad data. Color of cell not recognized.");
@@ -62,6 +79,10 @@ Board::Board(vector<string> data, int& p1pts, int& p2pts) {
             m_boardArray[row][col].occupant.AllowCapture();
         }
     }
+    // Add the necessary points to reflect capturing an opponent.
+    int numPieces = m_boardSize + 2;
+    whitePts += (numPieces - numBlack) * 5;
+    blackPts += (numPieces - numWhite) * 5;
 }
 
 // Moves a player's piece on the board. Returns -1 if the move was unsuccessful. Returns the number
