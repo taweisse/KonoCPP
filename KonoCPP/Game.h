@@ -13,15 +13,12 @@ class Game
 {
 public:
     Game();
-    Game(Player&, Player&, int, Board = Board());
-    ~Game();
-
-    Game& operator= (const Game& other);
+    Game(shared_ptr<Player>, shared_ptr<Player>, int, Board = Board());
 
     bool PlayGame();
     
     const Player* const GetPlayer(int i) const {
-        return m_players[i - 1];
+        return m_players[i - 1].get();
     }
 
     const Board GetBoard() const {
@@ -43,8 +40,7 @@ public:
     }
 
 private:
-    //unique_ptr<Player> m_players[2];
-    Player* m_players[2];
+    shared_ptr<Player> m_players[2];
     Board m_gameboard;
     BoardView m_renderer;
     int m_curPlayer;

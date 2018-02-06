@@ -10,40 +10,16 @@ Game::Game()
     m_curPlayer = 0;
 }
 
-Game::Game(Player& p1, Player& p2, int curPlayer, Board board)
+Game::Game(shared_ptr<Player> p1, shared_ptr<Player> p2, int curPlayer, Board board)
 {
-    m_players[0] = &p1;
-    m_players[1] = &p2;
+    m_players[0] = p1;
+    m_players[1] = p2;
     m_gameboard = board;
     m_renderer = BoardView();
     if (curPlayer < 1 || curPlayer > 2) {
         throw invalid_argument("Invalid player number.");
     }
     m_curPlayer = curPlayer - 1;
-}
-
-Game::~Game()
-{   
-    // Free memory used by player objects.
-    //delete m_players[0];
-    //delete m_players[1];
-}
-
-Game& Game::operator= (const Game& other)
-{
-    if (this != &other) {
-        // Free old player objects.
-        delete m_players[0];
-        delete m_players[1];
-
-        // Copy new values.
-        m_players[0] = other.m_players[0];
-        m_players[1] = other.m_players[1];
-        m_gameboard = other.m_gameboard;
-        m_renderer = other.m_renderer;
-        m_curPlayer = other.m_curPlayer;
-    }
-    return *this;
 }
 
 // Starts a game.

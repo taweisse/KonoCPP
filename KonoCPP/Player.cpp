@@ -47,7 +47,7 @@ const Move Player::Play(Board& board)
         if (!possibleMoves[i].IsValid()) {
             continue;
         }
-        if (possibleMoves[i].GetReason() > bestReason) {
+        if (possibleMoves[i].GetReason() >= bestReason) {
             bestMove = possibleMoves[i];
             bestReason = possibleMoves[i].GetReason();
         }

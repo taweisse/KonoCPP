@@ -14,8 +14,8 @@ Tournament::Tournament(Player::PlayerType p1, Player::PlayerType p2, Game game, 
 bool Tournament::PlayTournament()
 {
     // Pointers used to reference the players of each game.
-    Player* player1 = nullptr;
-    Player* player2 = nullptr;
+    shared_ptr<Player> player1;
+    shared_ptr<Player> player2;
 
     // Loop until the user does not want to play anymore.
     while (1) {
@@ -163,13 +163,8 @@ int Tournament::ThrowDice()
     return (p1Sum > p2Sum ? 1 : 2);
 }
 
-void Tournament::ConfigureGame(Player*& p1, Player*& p2)
+void Tournament::ConfigureGame(shared_ptr<Player>& p1, shared_ptr<Player>& p2)
 {
-    // In case we were passed a player pointer that had already been used, make sure we free the
-    // old allocated memory.
-    p1 = nullptr;
-    p2 = nullptr;
-
     // Let player 1 pick his color for this game.
     helpers::Color p1Color, p2Color;
 
@@ -203,17 +198,17 @@ void Tournament::ConfigureGame(Player*& p1, Player*& p2)
     cout << "\n";
 
     // Create new player objects for this game.
-    p1 = new Human(p1Color);
+    p1 = make_shared<Human>(Human(p1Color));
     if (m_players[1].m_type == Player::human) {
-        p2 = new Human(p2Color);
+        p2 = make_shared<Human>(Human(p2Color));
     }
     else if (m_players[1].m_type == Player::computer) {
-        p2 = new Computer(p2Color);
+        p2 = make_shared<Computer>(Computer(p2Color));
     }
     else {
         throw invalid_argument("Player 2 must have type human or computer.");
     }
 
     // Create the game for this round.
-    m_currentGame = Game(*p1, *p2, m_firstPlayer, Board(((size + 1) * 2) + 1));
+    m_currentGame = Game(p1, p2, m_firstPlayer, Board(((size + 1) * 2) + 1));
 }

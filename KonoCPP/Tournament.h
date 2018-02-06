@@ -52,5 +52,5 @@ private:
     string m_diceFile = "diceRolls.txt";
 
     int ThrowDice();
-    void ConfigureGame(Player*&, Player*&);
+    void ConfigureGame(shared_ptr<Player>&, shared_ptr<Player>&);
 };

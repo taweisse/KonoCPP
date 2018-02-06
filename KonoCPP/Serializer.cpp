@@ -199,19 +199,19 @@ bool Serializer::UnserializeFromFile(Tournament& tourn, const string& filename)
     }
 
     // Construct the correct players for this game. Player 1 will always be a human.
-    Player* player1 = new Human(p1Color, p1GamePoints);
+    shared_ptr<Player> player1 = make_shared<Human>(Human(p1Color, p1GamePoints));
 
     // Decide which type player 2 is.
-    Player* player2;
+    shared_ptr<Player> player2;
     if (p2Type == Player::human) {
-        player2 =  new Human(p2Color, p2GamePoints);
+        player2 = make_shared<Human>(Human(p2Color, p2GamePoints));
     }
     else {
-        player2 =  new Computer(p2Color, p2GamePoints);
+        player2 = make_shared<Computer>(Computer(p2Color, p2GamePoints));
     }
     
     // Construct the game object from our board and players.
-    Game loadedGame(*player1, *player2, nextPlayer, loadedBoard);
+    Game loadedGame(player1, player2, nextPlayer, loadedBoard);
 
     // Construct the tournament from the game.
     tourn = Tournament(p1Type, p2Type, loadedGame, round, p1Score, p2Score, nextPlayer);
