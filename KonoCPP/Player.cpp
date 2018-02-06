@@ -49,6 +49,7 @@ const Move Player::Play(Board& board)
         }
         if (possibleMoves[i].GetReason() > bestReason) {
             bestMove = possibleMoves[i];
+            bestReason = possibleMoves[i].GetReason();
         }
     }
 
@@ -89,18 +90,14 @@ Move Player::BestMove(const Board& board, int r, int c)
                     return Move(r, c, GetDirection(i, j), Move::Help, Move::Capture, r + i, c + j);
                 }
             }
-            // If there is no threat from an opponent, we should move towards the nearest home location.
-            if (!board.GetOwner(r, c) == m_color) {
-                return MoveToHome(board, r, c);
-            }
         }
     }
-    // If we cant do anything, return an invalid move to signal not to consider this one.
-    return Move();
+    // If there is no threat from an opponent, we should move towards the nearest home location.
+    return MoveToHome(board, r, c);
 }
 
 // Moves the player at (r, c) to an empty space on the board.
-Move Player::MoveToEmptySpace(const Board& board, int r, int c) {
+Move Player::MoveToEmptySpace(const Board& board, int r, int c, Move::ActionReason reason) {
     for (int i = -1; i <= 1; i++) {
         if (i == 0) {
             continue;
@@ -119,7 +116,7 @@ Move Player::MoveToEmptySpace(const Board& board, int r, int c) {
             }
             // If a neighboring space is empty, we will move there.
             if (neighbor.IsEmpty()) {
-                return Move(r, c, GetDirection(i, j), Move::Help, Move::ActionReason::Escape, r + i, c + j);
+                return Move(r, c, GetDirection(i, j), Move::Help, reason, r + i, c + j);
             }
         }
     }
@@ -143,14 +140,17 @@ Move Player::MoveToHome(const Board& board, int r, int c) {
             helpers::Color targetOwner = board.GetOwner(i, j);
             // See if the current scan location is an opponent's home cell and if it is empty.
             if (targetOwner != m_color && targetOwner != helpers::NullColor) {
-                int dist = GetDistance(r, i, c, j);
+                int dist = GetDistance(r, c, i, j);
                 // If the number is odd, no good. This means that we cant actually reach this home
                 // location due to the nature of only being able to move diagonally.
                 if (dist % 2) {
                     continue;
                 }
-                // If the number is even, and it is closer than what we've found previously, lets
-                // store it as a new low.
+                if (targetPiece.GetColor() == m_color) {
+                    continue;
+                }
+                // If the number is even, and it is closer than what we've found previously, and it
+                // is not occupied by one of our players, lets store it as a new low.
                 if (dist < closestDist) {
                     closestDist = dist;
                     closestRow = i;
@@ -202,8 +202,8 @@ Move Player::MoveTowards(const Board& board, int curR, int curC, int targetR, in
             }
         }
     }
-    // Return a null move if we cant get closer.
-    return Move();
+    // Return a random move if we cant get closer.
+    return MoveToEmptySpace(board, curR, curC, Move::Null);
 }
 
 // Gets a cardinal direction based of of positive and negative offsets from a point.

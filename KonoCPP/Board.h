@@ -12,6 +12,9 @@ using namespace std;
 class Board
 {
 public:
+
+    enum MoveError { Null = 0, Empty = 1, Direction = 2, Occupied = 3, Capture = 4 };
+
     // Default constructor will create a 0 - sized board.
     Board()
     {
@@ -28,7 +31,7 @@ public:
         return m_boardSize;
     }
 
-    bool MakeMove(const Move&, int&);
+    MoveError MakeMove(const Move&, int&);
 
     const char GetOccupantColor(const int& row, const int& col) const;
 

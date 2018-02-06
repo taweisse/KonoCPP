@@ -88,7 +88,7 @@ Board::Board(vector<string> data, int& whitePts, int& blackPts) {
 // Moves a player's piece on the board. Returns -1 if the move was unsuccessful. Returns the number
 // of points gained or lost from this move, or -1 if the move was not successful. This function 
 // accepts 1 - indexed coordinates.
-bool Board::MakeMove(const Move& move, int& points)
+Board::MoveError Board::MakeMove(const Move& move, int& points)
 {
     int vertPos = move.GetRow() - 1;
     int horPos = move.GetCol() - 1;
@@ -99,8 +99,7 @@ bool Board::MakeMove(const Move& move, int& points)
 
     // Check that there is a piece at this location.
     if (moveCell.occupant.IsEmpty()) {
-        cout << "There is no piece at the specified location.\n";
-        return false;
+        return Empty;
     }
 
     // Make sure board coordinates are on the board.
@@ -133,8 +132,7 @@ bool Board::MakeMove(const Move& move, int& points)
 
     // Validate the user's move direction. It must stay within bounds.
     if (targetVertPos >= m_boardSize || targetVertPos < 0 || targetHorPos >= m_boardSize || targetHorPos < 0) {
-        cout << "Invalid move direction. A move must remain within the board's bounds. \n";
-        return false;
+        return Direction;
     }
 
     Cell& targetCell = m_boardArray[targetVertPos][targetHorPos];
@@ -144,13 +142,11 @@ bool Board::MakeMove(const Move& move, int& points)
     // must have the ability to capture.
     if (!targetCell.occupant.IsEmpty()) {
         if (moveCol == targetCol) {
-            cout << "You already have a piece at this location. \n";
-            return false;
+            return Occupied;
         }
         // This means the opponent occupies the target cell.
         else if (!moveCell.occupant.CanCapture()) {
-            cout << "This piece does not have the abililty to capture. \n";
-            return false;
+            return Capture;
         }
     }
 
@@ -173,7 +169,7 @@ bool Board::MakeMove(const Move& move, int& points)
     targetCell.occupant = moveCell.occupant;
     moveCell.occupant = Piece();
 
-    return true;
+    return Null;
 }
 
 const char Board::GetOccupantColor(const int& row, const int& col) const

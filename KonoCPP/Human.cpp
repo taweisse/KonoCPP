@@ -77,13 +77,27 @@ const Move Human::Play(Board& board)
             if (helpers::ReadDirection(dir)) {
                 break;
             }
-            cout << "Direction invalid. \n";
+            cout << "Direction invalid. ";
         }
         // Build and perform the move. The function will return true if successful, in which case we 
         // can break from the loop and complete this player's turn.
         int pts = 0;
         thisMove = Move(row, col, dir, Move::Play, Move::Null);
-        if (!board.MakeMove(thisMove, pts)) {
+        Board::MoveError err = board.MakeMove(thisMove, pts);
+        if ( err == Board::Capture ) {
+            cout << "\nThat piece does not have the ability to capture. \n";
+            continue;
+        }
+        else if (err == Board::Direction) {
+            cout << "\nA move must stay within the board's bounds. \n";
+            continue;
+        }
+        else if (err == Board::Empty) {
+            cout << "\nThere is no piece at that location. \n";
+            continue;
+        }
+        else if (err == Board::Occupied) {
+            cout << "\nYou already have a piece at that location. \n";
             continue;
         }
         // If we make it here, the move was successful, so we can add the points recieved to the 

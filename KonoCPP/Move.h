@@ -6,7 +6,7 @@ class Move
 {
 public:
     enum Action { Play, Quit, Save, Help };
-    enum ActionReason { Escape = 4, Capture = 3, Advance = 2, Null = 1 };
+    enum ActionReason { Escape = 3, Capture = 2, Advance = 1, Null = 0 };
     enum Direction { NW, NE, SE, SW, NullDir };
 
     // Constructors. Default, an actual move, and an action - only.

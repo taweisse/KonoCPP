@@ -45,7 +45,7 @@ protected:
     helpers::Color m_color;
 
     Move BestMove(const Board&, int, int);
-    Move MoveToEmptySpace(const Board&, int, int);
+    Move MoveToEmptySpace(const Board&, int, int, Move::ActionReason = Move::Escape);
     Move MoveToHome(const Board&, int, int);
     Move MoveTowards(const Board&, int, int, int, int);
     Move::Direction GetDirection(int, int);

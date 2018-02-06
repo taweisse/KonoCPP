@@ -22,10 +22,14 @@ const Move Computer::PrePlay(Board& board)
                 system("pause");
             }
         case 2:
-            if (thisMove.GetAction() != Move::Quit) {
+            if (tmpMove.GetAction() == Move::Quit) {
+                return tmpMove;
+            }
+            else {
                 thisMove = Move(tmpMove.GetRow(), tmpMove.GetCol(), tmpMove.GetDir(), Move::Play, tmpMove.GetReason(), tmpMove.GetTargetRow(), tmpMove.GetTargetCol());
                 int pts;
-                if (!board.MakeMove(thisMove, pts)) {
+                if (board.MakeMove(thisMove, pts) != Board::Null) {
+                    cout << "The computer tried to play an invalid move.\n";
                     continue;
                 }
                 m_points += pts;
